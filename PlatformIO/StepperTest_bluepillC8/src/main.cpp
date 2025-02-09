@@ -13,7 +13,7 @@ void rotateMotor(bool clockwise, int steps);
 
 String inputString = "";  // A variable to hold the received string
 bool inputComplete = false;  // A flag to indicate when the input is complete
-
+//bruh
 
 void setup() {
   // Set motor pins as outputs
