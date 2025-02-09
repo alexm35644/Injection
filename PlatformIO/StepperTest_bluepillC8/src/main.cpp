@@ -6,10 +6,14 @@
 #define LED_PIN PC13 // Onboard LED
 
 // Control parameters
-#define STEP_DELAY 500 // Microseconds between steps
-#define STEPS_PER_REV 1000 // Steps per revolution (adjust based on your motor)
+#define STEP_DELAY 100 // Microseconds between steps
+#define STEPS_PER_REV 3000 // Steps per revolution (adjust based on your motor)
 
 void rotateMotor(bool clockwise, int steps);
+
+String inputString = "";  // A variable to hold the received string
+bool inputComplete = false;  // A flag to indicate when the input is complete
+
 
 void setup() {
   // Set motor pins as outputs
@@ -22,18 +26,40 @@ void setup() {
   digitalWrite(STEP_PIN, LOW);
   digitalWrite(DIR_PIN, LOW);
   digitalWrite(LED_PIN, LOW);
+
+  while(!Serial);
+  Serial.begin(115200);
+  Serial.println("Stepper Motor Test");
+  pinMode(PC13,OUTPUT);
 }
 
 void loop() {
-  // Rotate motor clockwise
-  rotateMotor(true, STEPS_PER_REV);
-  digitalWrite(PC13, LOW);
-  delay(1000); // Pause for a second
 
-  // Rotate motor counterclockwise
-  rotateMotor(false, STEPS_PER_REV);
-  digitalWrite(PC13, HIGH);
-  delay(1000); // Pause for a second
+  if (Serial.available() > 0) {
+    // Read a line of incoming data (terminated by newline)
+    String input = Serial.readStringUntil('\n');
+    
+    // Blink the LED to indicate data reception.
+    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(LED_BUILTIN, LOW);
+    
+    // Optionally echo the received data to Serial (useful when ROS2 node is not active).
+    Serial.print("Received: ");
+    Serial.println(input);
+  }
+
+  // // Rotate motor clockwise
+  // rotateMotor(true, STEPS_PER_REV);
+  // digitalWrite(PC13, LOW);
+  // Serial.println("Up");
+
+  // delay(100); // Pause for a second
+
+  // // Rotate motor counterclockwise
+  // rotateMotor(false, STEPS_PER_REV);
+  // digitalWrite(PC13, HIGH);
+  // Serial.println("Down");
+  // delay(100); // Pause for a second
 }
 
 void rotateMotor(bool clockwise, int steps) {
