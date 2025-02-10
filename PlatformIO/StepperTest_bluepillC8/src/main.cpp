@@ -6,6 +6,7 @@
 #define LIMIT_SWITCH_PIN PC14  // Limit switch pin
 #define FORWARD 1 // Away from limit switch
 #define REVERSE 0 // Toward limit switch 
+#define SYNC_BYTE 0xAA  // Sync byte to mark the beginning of each data packet
 
 // Control parameters
 const float targetDistance = 0.3; // Target distance (meters)
@@ -15,21 +16,21 @@ const int maxSteps = 8000;         // Max step count limit (adjust as needed)
 int stepCount = 0;                 // Tracks the number of steps taken
 
 // Serial Inputs
-char inputBuffer[20];  // Buffer to hold incoming data
-int bufferIndex = 0;   // Index for buffer
+char inputBuffer[4];  // Buffer to hold incoming data
 
 // Stepper motor control parameters
-const int stepDelay = 1000;  // Delay between steps (microseconds)
-const int stepsPerRev = 500;
+const int stepDelay = 200;  // Delay between steps (microseconds)
+const int stepsPerRev = 5;
 
 void rotateMotor(bool clockwise, int steps);
 void homingRoutine();
 void stopMotor();
-void readingUART();
+void readUARTData();
+
+unsigned long previousMillis = 0;  // For non-blocking delay
 
 void setup() {
   Serial.begin(115200);
-  Serial.setTimeout(100);
   while (!Serial) { ; }  // Wait for Serial to be ready
 
   pinMode(STEP_PIN, OUTPUT);  // Step pin as output
@@ -41,31 +42,15 @@ void setup() {
 
   // Perform homing routine
   homingRoutine();
-
-  // digitalWrite(DIR_PIN, FORWARD);
-  // for (int i = 0; i < 1000; i++) {
-  //   digitalWrite(STEP_PIN, HIGH);
-  //   delayMicroseconds(stepDelay); // Step pulse duration
-  //   digitalWrite(STEP_PIN, LOW);
-  //   delayMicroseconds(stepDelay); // Step pulse interval
-  //   stepCount++;  // Increment step count after each step
-  // }
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    String input = Serial.readString();
-    
-    // Try to convert the input to a float
-    currentDistance = input.toFloat();
-
-    // Blink the LED to indicate data reception
-    digitalWrite(LED_PIN, HIGH);
-    digitalWrite(LED_PIN, LOW);
-    
-    // Print the received distance
-    Serial.print("Received Distance: ");
-    Serial.println(currentDistance);
+  unsigned long currentMillis = millis();
+  
+  // Read UART data every 100ms without blocking motor control
+  if (currentMillis - previousMillis >= 100) {
+    previousMillis = currentMillis;
+    readUARTData();
   }
 
   // Decide direction based on currentDistance and limit checks
@@ -77,64 +62,79 @@ void loop() {
     rotateMotor(FORWARD, stepsPerRev);
   }
 
-  if(digitalRead(LIMIT_SWITCH_PIN) == HIGH){
-      digitalWrite(DIR_PIN, LOW);  // Set direction to zero or stop
-      digitalWrite(STEP_PIN, LOW); // Ensure no more steps are sent
-      stepCount = 0;
+  // Check the limit switch at each step
+  if (digitalRead(LIMIT_SWITCH_PIN) == HIGH){
+      stopMotor();
       return;
-    }
+  }
+}
 
+void readUARTData() {
+  if (Serial.available() >= 5) {  // 1 byte sync + 4 bytes data = 5 bytes
+    byte syncByte = Serial.read();  // Read the sync byte
+
+    // Debugging: print sync byte received
+    Serial.print("Sync Byte: ");
+    Serial.println(syncByte, HEX);
+
+    // If sync byte matches, read 4 more bytes for the float data
+    if (syncByte == SYNC_BYTE) {
+      for (int i = 0; i < 4; i++) {
+        inputBuffer[i] = Serial.read();
+      }
+
+      // Convert byte array to float
+      memcpy(&currentDistance, inputBuffer, sizeof(float));
+
+      // Debugging: print received distance value
+      Serial.print("Received Distance: ");
+      Serial.println(currentDistance, 4);
+
+      // Toggle LED to indicate data reception
+      digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+    } else {
+      // If the sync byte doesn't match, flush any leftover data
+      Serial.flush();  // Discard any invalid bytes in the buffer
+    }
+  }
 }
 
 void rotateMotor(bool clockwise, int steps) {
-  // Set direction
   if(!clockwise){
-    // Perform steps
-  digitalWrite(DIR_PIN, FORWARD);
-  for (int i = 0; i < steps; i++) {
-    if(stepCount>maxSteps){
-      digitalWrite(DIR_PIN, LOW);  // Set direction to zero or stop
-      digitalWrite(STEP_PIN, LOW); // Ensure no more steps are sent
-      //Serial.println("max step count reached");
-      return;
+    digitalWrite(DIR_PIN, FORWARD);
+    for (int i = 0; i < steps; i++) {
+      if(stepCount > maxSteps){
+        stopMotor();
+        return;
+      }
+      digitalWrite(STEP_PIN, HIGH);
+      delayMicroseconds(stepDelay);
+      digitalWrite(STEP_PIN, LOW);
+      delayMicroseconds(stepDelay);
+      stepCount++;  // Increment step count after each step
     }
-    digitalWrite(STEP_PIN, HIGH);
-    delayMicroseconds(stepDelay); // Step pulse duration
-    digitalWrite(STEP_PIN, LOW);
-    delayMicroseconds(stepDelay); // Step pulse interval
-    stepCount++;  // Increment step count after each step
-  }
-  } else{
-  digitalWrite(DIR_PIN, REVERSE);
-  
-  for (int i = 0; i < steps; i++) {
-    if(digitalRead(LIMIT_SWITCH_PIN) == HIGH){
-      digitalWrite(DIR_PIN, LOW);  // Set direction to zero or stop
-      digitalWrite(STEP_PIN, LOW); // Ensure no more steps are sent
-      stepCount = 0;
-      //Serial.println("lim switch triggered");
-      return;
-    } 
+  } else {
+    digitalWrite(DIR_PIN, REVERSE);
+    for (int i = 0; i < steps; i++) {
+      if(digitalRead(LIMIT_SWITCH_PIN) == HIGH){
+        stopMotor();
+        return;
+      }
 
-    digitalWrite(STEP_PIN, HIGH);
-    delayMicroseconds(stepDelay); // Step pulse duration
-    digitalWrite(STEP_PIN, LOW);
-    delayMicroseconds(stepDelay); // Step pulse interval
-    stepCount--;  // Increment step count after each step
+      digitalWrite(STEP_PIN, HIGH);
+      delayMicroseconds(stepDelay);
+      digitalWrite(STEP_PIN, LOW);
+      delayMicroseconds(stepDelay);
+      stepCount--;  // Increment step count after each step
+    }
   }
-  }
-
-  
 }
 
 void homingRoutine() {
   Serial.println("Starting Homing Routine...");
-
-  // Set direction for homing (e.g., REVERSE)
   digitalWrite(DIR_PIN, REVERSE);
 
-  while (digitalRead(LIMIT_SWITCH_PIN) == LOW) {  // While the limit switch is not triggered (NC logic)
-    // Step the motor
+  while (digitalRead(LIMIT_SWITCH_PIN) == LOW) {  // While the limit switch is not triggered
     digitalWrite(STEP_PIN, HIGH);
     delayMicroseconds(stepDelay);
     digitalWrite(STEP_PIN, LOW);
@@ -145,9 +145,6 @@ void homingRoutine() {
 }
 
 void stopMotor() {
-  // Stop the motor (You can add logic to safely stop the motor, if needed)
   digitalWrite(DIR_PIN, LOW);  // Set direction to zero or stop
   digitalWrite(STEP_PIN, LOW); // Ensure no more steps are sent
 }
-
-
