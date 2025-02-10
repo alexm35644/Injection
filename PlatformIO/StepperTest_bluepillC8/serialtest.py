@@ -14,26 +14,12 @@ else:
 value_lock = threading.Lock()  # Lock for thread-safe access to the value
 value = 0.3
 
-# # Function to send data
-# def send_data():
-#     global value
-#     while True:
-#         with value_lock:  # Lock to ensure thread-safe access
-#             if value < 0.3:
-#                 value += 0.01
-#             if value is 0.3:
-#                 value = 0.01
-#             data = struct.pack('<f', value)  # Convert float to 4 bytes
-#         ser.write(data)  # Send the bytes
-#         print(f"Sent: {value} as bytes: {[hex(b) for b in data]}")
-#         time.sleep(0.1)  # Delay to avoid spamming the serial port
-
 # Function to send data
 def send_data():
     global value
     while True:
         # Send value 0.2 for 50 iterations
-        for _ in range(20):
+        for _ in range(50):
             value = 0.2
             # Pack the value as a float (4 bytes)
             data = struct.pack('<f', value)
@@ -41,7 +27,7 @@ def send_data():
             ser.write(bytes([0xAA]))  # Sync byte
             ser.write(data)  # 4 bytes of float data
             print(f"Sent: {value} as bytes: {[hex(b) for b in [0xAA] + list(data)]}")
-            time.sleep(0.2)  # Delay to avoid spamming the serial port
+            time.sleep(0.1)  # Delay to avoid spamming the serial port
 
         # Send value 0.4 for 50 iterations
         for _ in range(50):
@@ -50,7 +36,7 @@ def send_data():
             ser.write(bytes([0xAA]))  # Sync byte
             ser.write(data)  # 4 bytes of float data
             print(f"Sent: {value} as bytes: {[hex(b) for b in [0xAA] + list(data)]}")
-            time.sleep(0.2)  # Delay to avoid spamming the serial port
+            time.sleep(0.1)  # Delay to avoid spamming the serial port
 
         for _ in range(20):
             value = 0.3
@@ -58,9 +44,9 @@ def send_data():
             ser.write(bytes([0xAA]))  # Sync byte
             ser.write(data)  # 4 bytes of float data
             print(f"Sent: {value} as bytes: {[hex(b) for b in [0xAA] + list(data)]}")
-            time.sleep(0.2)  # Delay to avoid spamming the serial port
+            time.sleep(0.1)  # Delay to avoid spamming the serial port
 
-        time.sleep(1)  # Delay to avoid spamming the serial port
+       
         
         
 

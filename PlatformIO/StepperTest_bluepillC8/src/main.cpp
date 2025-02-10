@@ -19,7 +19,7 @@ int stepCount = 0;                 // Tracks the number of steps taken
 char inputBuffer[4];  // Buffer to hold incoming data
 
 // Stepper motor control parameters
-const int stepDelay = 200;  // Delay between steps (microseconds)
+const int stepDelay = 300;  // Delay between steps (microseconds)
 const int stepsPerRev = 5;
 
 void rotateMotor(bool clockwise, int steps);
@@ -87,7 +87,7 @@ void readUARTData() {
       memcpy(&currentDistance, inputBuffer, sizeof(float));
 
       // Debugging: print received distance value
-      Serial.print("Received Distance: ");
+      // Serial.print("Received Distance: ");
       Serial.println(currentDistance, 4);
 
       // Toggle LED to indicate data reception
