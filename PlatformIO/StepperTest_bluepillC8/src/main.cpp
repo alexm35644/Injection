@@ -11,7 +11,7 @@
 // Control parameters
 const float targetDistance = 0.3; // Target distance (meters)
 float currentDistance = 0.3;      // Current distance (received via UART)
-float tolerance = 0.02;
+float tolerance = 0.01;
 const int maxSteps = 8000;         // Max step count limit (adjust as needed)
 int stepCount = 0;                 // Tracks the number of steps taken
 
@@ -19,10 +19,11 @@ int stepCount = 0;                 // Tracks the number of steps taken
 char inputBuffer[4];  // Buffer to hold incoming data
 
 // Stepper motor control parameters
-const int stepDelay = 300;  // Delay between steps (microseconds)
-const int stepsPerRev = 5;
+const int stepDelay = 250;  // Delay between steps (microseconds)
+const int stepsPerRev = 1;
+int variableDelay; 
 
-void rotateMotor(bool clockwise, int steps);
+void rotateMotor(bool clockwise, int steps, int variable_delay);
 void homingRoutine();
 void stopMotor();
 void readUARTData();
@@ -47,19 +48,21 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
   
-  // Read UART data every 100ms without blocking motor control
-  if (currentMillis - previousMillis >= 100) {
-    previousMillis = currentMillis;
+  // // Read UART data every 100ms without blocking motor control
+  // if (currentMillis - previousMillis >= 100) {
+  //   previousMillis = currentMillis;
     readUARTData();
-  }
+  // }
 
   // Decide direction based on currentDistance and limit checks
-  if (currentDistance < targetDistance - tolerance && stepCount < maxSteps) {
+  if (currentDistance < (targetDistance - tolerance) && stepCount < maxSteps) {
     // Move stepper forward (increase distance)
-    rotateMotor(REVERSE, stepsPerRev);
-  } else if (currentDistance > targetDistance + tolerance) {
+    variableDelay = -2100 * (targetDistance - currentDistance) + 700;
+    rotateMotor(REVERSE, stepsPerRev, variableDelay);
+  } else if (currentDistance > (targetDistance + tolerance)) {
     // Move stepper backward (decrease distance)
-    rotateMotor(FORWARD, stepsPerRev);
+    variableDelay = -2100 * (currentDistance - targetDistance) + 700;
+    rotateMotor(FORWARD, stepsPerRev, variableDelay);
   }
 
   // Check the limit switch at each step
@@ -74,8 +77,8 @@ void readUARTData() {
     byte syncByte = Serial.read();  // Read the sync byte
 
     // Debugging: print sync byte received
-    Serial.print("Sync Byte: ");
-    Serial.println(syncByte, HEX);
+    //Serial.print("Sync Byte: ");
+    //Serial.println(syncByte, HEX);
 
     // If sync byte matches, read 4 more bytes for the float data
     if (syncByte == SYNC_BYTE) {
@@ -88,7 +91,7 @@ void readUARTData() {
 
       // Debugging: print received distance value
       // Serial.print("Received Distance: ");
-      Serial.println(currentDistance, 4);
+      //Serial.println(currentDistance, 4);
 
       // Toggle LED to indicate data reception
       digitalWrite(LED_PIN, !digitalRead(LED_PIN));
@@ -99,7 +102,7 @@ void readUARTData() {
   }
 }
 
-void rotateMotor(bool clockwise, int steps) {
+void rotateMotor(bool clockwise, int steps, int variable_delay) {
   if(!clockwise){
     digitalWrite(DIR_PIN, FORWARD);
     for (int i = 0; i < steps; i++) {
@@ -108,9 +111,9 @@ void rotateMotor(bool clockwise, int steps) {
         return;
       }
       digitalWrite(STEP_PIN, HIGH);
-      delayMicroseconds(stepDelay);
+      delayMicroseconds(variable_delay);
       digitalWrite(STEP_PIN, LOW);
-      delayMicroseconds(stepDelay);
+      delayMicroseconds(variable_delay);
       stepCount++;  // Increment step count after each step
     }
   } else {
@@ -122,9 +125,9 @@ void rotateMotor(bool clockwise, int steps) {
       }
 
       digitalWrite(STEP_PIN, HIGH);
-      delayMicroseconds(stepDelay);
+      delayMicroseconds(variable_delay);
       digitalWrite(STEP_PIN, LOW);
-      delayMicroseconds(stepDelay);
+      delayMicroseconds(variable_delay);
       stepCount--;  // Increment step count after each step
     }
   }

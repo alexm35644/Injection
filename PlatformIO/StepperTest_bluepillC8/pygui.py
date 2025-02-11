@@ -5,7 +5,7 @@ import time
 import tkinter as tk
 
 # Configure the serial port
-ser = serial.Serial('/dev/tty.usbmodem1101', 115200)  # Update port and baud rate
+ser = serial.Serial('/dev/tty.usbmodem2101', 115200)  # Update port and baud rate
 if ser.is_open:
     print("Port is open!")
 else:
@@ -13,7 +13,7 @@ else:
 
 # Global variable for shared value
 value_lock = threading.Lock()  # Lock for thread-safe access to the value
-value = 0.3
+value = 0.30
 
 # Function to send data
 def send_data():
@@ -53,7 +53,7 @@ def create_gui():
     slider = tk.Scale(
         root,
         from_=0,
-        to=0.5,
+        to=0.6,
         resolution=0.01,
         orient=tk.HORIZONTAL,
         command=update_value,
@@ -61,7 +61,7 @@ def create_gui():
         sliderrelief=tk.GROOVE,  # Style the slider
         width=20  # Adjust the thickness of the slider handle
     )
-    slider.set(0.3)  # Set default value
+    slider.set(value)  # Set default value
     slider.pack(pady=10)
 
     root.mainloop()
