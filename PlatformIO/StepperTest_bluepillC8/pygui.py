@@ -5,7 +5,7 @@ import time
 import tkinter as tk
 
 # Configure the serial port
-ser = serial.Serial('/dev/tty.usbmodem2101', 115200)  # Update port and baud rate
+ser = serial.Serial('/dev/tty.usbmodem101', 115200)  # Update port and baud rate
 if ser.is_open:
     print("Port is open!")
 else:
@@ -26,7 +26,7 @@ def send_data():
         ser.write(bytes([0xAA]))  # Sync byte
         ser.write(data)  # 4 bytes of float data
         print(f"Sent: {value} as bytes: {[hex(b) for b in [0xAA] + list(data)]}")
-        time.sleep(0.1)  # Delay to avoid spamming the serial port
+        time.sleep(0.01)  # Delay to avoid spamming the serial port
 
 # Function to receive data
 def receive_data():
@@ -52,8 +52,8 @@ def create_gui():
     # Create a larger slider
     slider = tk.Scale(
         root,
-        from_=0,
-        to=0.6,
+        from_=-0.1,
+        to=1,
         resolution=0.01,
         orient=tk.HORIZONTAL,
         command=update_value,

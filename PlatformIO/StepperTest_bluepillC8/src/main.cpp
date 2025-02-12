@@ -9,11 +9,14 @@
 #define SYNC_BYTE 0xAA  // Sync byte to mark the beginning of each data packet
 
 // Control parameters
+const int maxInputDistance = 0.6;
+const int minInputDistance = 0.15; 
 const float targetDistance = 0.3; // Target distance (meters)
 float currentDistance = 0.3;      // Current distance (received via UART)
 float tolerance = 0.01;
-const int maxSteps = 8000;         // Max step count limit (adjust as needed)
+const int maxSteps = 9000;         // Max step count limit (adjust as needed)
 int stepCount = 0;                 // Tracks the number of steps taken
+
 
 // Serial Inputs
 char inputBuffer[4];  // Buffer to hold incoming data
@@ -55,14 +58,22 @@ void loop() {
   // }
 
   // Decide direction based on currentDistance and limit checks
-  if (currentDistance < (targetDistance - tolerance) && stepCount < maxSteps) {
+  if (currentDistance < (targetDistance - tolerance) && (stepCount < maxSteps) && (currentDistance > minInputDistance)) {
     // Move stepper forward (increase distance)
     variableDelay = -2100 * (targetDistance - currentDistance) + 700;
-    rotateMotor(REVERSE, stepsPerRev, variableDelay);
-  } else if (currentDistance > (targetDistance + tolerance)) {
+    if (variableDelay > 100){
+      rotateMotor(REVERSE, stepsPerRev, variableDelay);
+    } else {
+      rotateMotor(REVERSE, stepsPerRev, 100);
+    }
+  } else if ((currentDistance > (targetDistance + tolerance)) && (currentDistance > minInputDistance)) {
     // Move stepper backward (decrease distance)
     variableDelay = -2100 * (currentDistance - targetDistance) + 700;
-    rotateMotor(FORWARD, stepsPerRev, variableDelay);
+    if (variableDelay > 100){
+      rotateMotor(FORWARD, stepsPerRev, variableDelay);
+    } else {
+      rotateMotor(FORWARD, stepsPerRev, 100);
+    }
   }
 
   // Check the limit switch at each step
