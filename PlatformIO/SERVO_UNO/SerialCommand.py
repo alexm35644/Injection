@@ -39,15 +39,17 @@ def receive_data(log_widget):
 # Function to update the value from the slider
 def update_value(new_value):
     global value
-    new_value = float(new_value)  # Ensure the value is a float
-
-    # Check if the value is 10 or greater
-    if new_value >= 10:
-        new_value *= 10  # Multiply by 10 if the value is 10 or greater
+    new_value = int(new_value)  # Ensure the value is an integer
 
     with value_lock:
         value = new_value
 
+# Function to reset the value to zero
+def reset_value(slider):
+    global value
+    with value_lock:
+        value = 0
+    slider.set(0)  # Update the slider position
 
 # Create Tkinter GUI
 def create_gui():
@@ -76,6 +78,17 @@ def create_gui():
     )
     slider.set(value)  # Set default value
     slider.pack(pady=10)
+
+    # Add a button to reset the value to zero
+    reset_button = tk.Button(
+        root,
+        text="Reset to Zero",
+        command=lambda: reset_value(slider),
+        bg="lightgray",
+        padx=10,
+        pady=5
+    )
+    reset_button.pack(pady=10)
 
     # Create text boxes for send and receive logs
     send_label = tk.Label(root, text="Send Log")
