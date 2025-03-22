@@ -18,10 +18,15 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
+#include "i2c.h"
+#include "usart.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <stdlib.h> 
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -30,8 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define AS5600_I2C_ADDR 0x36 << 1 // AS5600 I2C address
-#define AS5600_RAW_ANGLE_REG 0x0C // Register to read the raw angle
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -39,21 +43,24 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c1;
-UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-char uart_buffer[50];
-uint16_t as5600_angle;
+
+#define UART_BUFFER_SIZE 256
+volatile uint8_t rx_byte;                        // For receiving single byte
+volatile uint8_t uart_buffer[UART_BUFFER_SIZE];  // Circular buffer
+volatile uint16_t buffer_index = 0;     // Index for storing data
+
+volatile uint8_t uart_received = 0; // Flag to indicate a new message is available
+volatile char received_string[UART_BUFFER_SIZE]; // Store the received string
+volatile char previous_string[UART_BUFFER_SIZE]; // Store the received string
+
+int joint1, joint2, joint3, joint4, joint5, actuator; 
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_USART1_UART_Init(void);
-static void MX_I2C1_Init(void);
-static uint16_t AS5600_Read_Raw_Angle(void);
-
 /* USER CODE BEGIN PFP */
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 /* USER CODE END PFP */
@@ -68,6 +75,7 @@ static uint16_t AS5600_Read_Raw_Angle(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
   /* USER CODE END 1 */
 
@@ -87,74 +95,26 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART1_UART_Init();
   MX_I2C1_Init();
-
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  HAL_UART_Receive_IT(&huart2, &rx_byte, 1); // Start receiving single bytes in interrupt mode
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* Read AS5600 angle */
-    //as5600_angle = AS5600_Read_Raw_Angle();
+    ToggleLEDs();
+  
+  
+    /* USER CODE END WHILE */
 
-    /* Send angle over UART */
-    //printf("Angle: %u\r\n", as5600_angle);
-
-    /* Toggle LEDs sequentially */
-    HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-    char c = 'A'; // The character to send
-    HAL_UART_Transmit(&huart1, (uint8_t *)&c, 1, HAL_MAX_DELAY); // Transmit the character
-    HAL_Delay(100);
-    HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
-    HAL_Delay(100);
-    HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
-    HAL_Delay(100);
-    HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
-    HAL_Delay(100);
+    /* USER CODE BEGIN 3 */
   }
-  /* USER CODE END WHILE */
-
-  /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
-}
-  /**
-  * @brief  Retargets the C library printf function to the USART.
-  * @retval None
-  */
-  PUTCHAR_PROTOTYPE
-  {
-  /* Place your implementation of fputc here */
-  /* e.g. write a character to the USART1 and Loop until the end of transmission */
-  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
-
-  return ch;
-  }
-/**
-  * @brief Read raw angle from AS5600.
-  * @retval uint16_t Raw angle value
-  */
-static uint16_t AS5600_Read_Raw_Angle(void)
-{
-  uint8_t raw_angle_data[2] = {0};
-  uint16_t raw_angle = 0;
-
-  /* Request raw angle data from AS5600 */
-  if (HAL_I2C_Mem_Read(&hi2c1, AS5600_I2C_ADDR, AS5600_RAW_ANGLE_REG, I2C_MEMADD_SIZE_8BIT, raw_angle_data, 2, HAL_MAX_DELAY) == HAL_OK)
-  {
-    /* Combine high and low bytes */
-    raw_angle = ((uint16_t)raw_angle_data[0] << 8) | raw_angle_data[1];
-  }
-  else
-  {
-    /* Handle communication error */
-    snprintf(uart_buffer, sizeof(uart_buffer), "I2C Error\r\n");
-    HAL_UART_Transmit(&huart1, (uint8_t *)uart_buffer, strlen(uart_buffer), HAL_MAX_DELAY);
-  }
-
-  return raw_angle;
 }
 
 /**
@@ -202,74 +162,105 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_I2C1_Init(void)
-{
-  hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
-  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c1.Init.OwnAddress1 = 0;
-  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c1.Init.OwnAddress2 = 0;
-  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
+/* USER CODE BEGIN 4 */
 
 /**
-  * @brief USART1 Initialization Function
-  * @param None
+  * @brief  Retargets the C library printf function to the USART.
   * @retval None
   */
-static void MX_USART1_UART_Init(void)
+ PUTCHAR_PROTOTYPE
+ {
+   /* Place your implementation of fputc here */
+   /* e.g. write a character to the USART1 and Loop until the end of transmission */
+   HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+ 
+   return ch;
+ }
+
+ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
+    if (huart->Instance == USART2) // Correct UART instance
+    {
+        // Store received byte in buffer
+        if (buffer_index < UART_BUFFER_SIZE - 1) 
+        {
+            uart_buffer[buffer_index++] = rx_byte;
+
+            // Check for newline or carriage return
+            if (rx_byte == '\n' || rx_byte == '\r') 
+            {
+                uart_buffer[buffer_index] = '\0'; // Null-terminate the string
+                buffer_index = 0;                // Reset the index for the next string
+
+                // Copy received string to the global buffer for main loop access
+                strcpy((char *)received_string, (char *)uart_buffer);
+
+                if(strcmp((char *)received_string, (char *)previous_string)){
+                  ProcessReceivedString((char *)received_string);
+                  strcpy((char *)previous_string, (char *)received_string);
+                }
+
+                
+            }
+        }
+        else 
+        {
+            // Buffer overflow, reset index
+            buffer_index = 0;
+            printf("Buffer overflow\n");
+        }
+
+        // Restart UART reception for the next byte
+        HAL_UART_Receive_IT(&huart2, &rx_byte, 1);
+    }
 }
 
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
+
+ 
+
+
+ 
+
+// Function to process the received string
+void ProcessReceivedString(char *str)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
+    // Check if the string starts with "set"
+    if (strncmp(str, "set", 3) == 0)
+    {
+        // Move the pointer to after "set" and the space
+        str += 4;  // Skip "set " (4 characters)
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : LED1_Pin LED2_Pin LED3_Pin LED4_Pin */
-  GPIO_InitStruct.Pin = LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+        // Now we expect a format like "000-000-000-000-000-000"
+        if (sscanf(str, "%3d-%3d-%3d-%3d-%3d-%3d", &joint1, &joint2, &joint3, &joint4, &joint5, &actuator) == 6)
+        {
+            // Successfully parsed the 6 numbers
+            printf("Received numbers: %d %d %d %d %d %d\n", joint1, joint2, joint3, joint4, joint5, actuator);
+        }
+        else
+        {
+            printf("Invalid format!\n");
+        }
+    }
+    else
+    {
+      printf("Received: %s\n", str);
+    }
 }
+
+void ToggleLEDs(){
+  /* Toggle LEDs sequentially */
+  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+  HAL_Delay(100);
+  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+  HAL_Delay(100);
+  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+  HAL_Delay(100);
+  HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+  HAL_Delay(100);
+  
+}
+/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
@@ -277,8 +268,28 @@ static void MX_GPIO_Init(void)
   */
 void Error_Handler(void)
 {
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
   {
   }
+  /* USER CODE END Error_Handler_Debug */
 }
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */
