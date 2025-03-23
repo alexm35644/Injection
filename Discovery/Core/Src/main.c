@@ -36,6 +36,15 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
+// HOME POSISTIONS FOR EACH JOINT
+#define JOINT1_HOME 90
+#define JOINT2_HOME 0
+#define JOINT3_HOME 0
+#define JOINT4_HOME 0 
+#define JOINT5_HOME 0
+#define ACTUATOR_HOME 0
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -55,8 +64,14 @@ volatile uint8_t uart_received = 0; // Flag to indicate a new message is availab
 volatile char received_string[UART_BUFFER_SIZE]; // Store the received string
 volatile char previous_string[UART_BUFFER_SIZE]; // Store the received string
 
-int joint1, joint2, joint3, joint4, joint5, actuator; 
+int joint1 = JOINT1_HOME;
+int joint2 = JOINT2_HOME;
+int joint3 = JOINT3_HOME;
+int joint4 = JOINT4_HOME; 
+int joint5 = JOINT5_HOME; 
+int actuator = ACTUATOR_HOME; 
 
+int prev_joint1, prev_joint2, prev_joint3, prev_joint4, prev_joint5, prev_actuator; 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -100,6 +115,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   HAL_UART_Receive_IT(&huart2, &rx_byte, 1); // Start receiving single bytes in interrupt mode
+  HomeSet(); // Set all joints to home position
 
   /* USER CODE END 2 */
 
@@ -195,7 +211,11 @@ void SystemClock_Config(void)
                 // Copy received string to the global buffer for main loop access
                 strcpy((char *)received_string, (char *)uart_buffer);
 
-                if(strcmp((char *)received_string, (char *)previous_string)){
+                if(strcmp("print", (char* )received_string)){
+                  ProcessReceivedString((char *)received_string);
+                  strcpy((char *)previous_string, (char *)received_string);
+                }
+                else if(strcmp((char *)received_string, (char *)previous_string)){
                   ProcessReceivedString((char *)received_string);
                   strcpy((char *)previous_string, (char *)received_string);
                 }
@@ -224,7 +244,6 @@ void SystemClock_Config(void)
 // Function to process the received string
 void ProcessReceivedString(char *str)
 {
-
     // Check if the string starts with "set"
     if (strncmp(str, "set", 3) == 0)
     {
@@ -236,17 +255,193 @@ void ProcessReceivedString(char *str)
         {
             // Successfully parsed the 6 numbers
             printf("Received numbers: %d %d %d %d %d %d\n", joint1, joint2, joint3, joint4, joint5, actuator);
+
+            // Check for changes in each joint and send new values if changed
+            if (joint1 != prev_joint1) {
+                // send to joint
+                prev_joint1 = joint1;
+            }
+            if (joint2 != prev_joint2) {
+                // send to joint
+                prev_joint2 = joint2;
+            }
+            if (joint3 != prev_joint3) {
+                // send to joint
+                prev_joint3 = joint3;
+            }
+            if (joint4 != prev_joint4) {
+                // send to joint
+                prev_joint4 = joint4;
+            }
+            if (joint5 != prev_joint5) {
+                // send to joint
+                prev_joint5 = joint5;
+            }
+            if (actuator != prev_actuator) {
+                // send to actuator
+                prev_actuator = actuator;
+            }
         }
         else
         {
             printf("Invalid format!\n");
         }
     }
+    // Just setting joint1 
+    else if (strncmp(str, "joint1", 6) == 0)
+    {
+        str += 7;
+
+        if (sscanf(str, "%3d", &joint1) == 1)
+        {
+            // Successfully parsed joint1
+            printf("Joint1 set: %d\n", joint1);
+
+            if (joint1 != prev_joint1) {
+                Joint1Set(joint1);
+                prev_joint1 = joint1;
+            }
+        }
+        else
+        {
+            printf("Invalid format!\n");
+        }
+    }
+
+    // Just setting joint2
+    else if (strncmp(str, "joint2", 6) == 0)
+    {
+        str += 7;
+
+        if (sscanf(str, "%3d", &joint2) == 1)
+        {
+            // Successfully parsed joint2
+            printf("Joint2 set: %d\n", joint2);
+
+            if (joint2 != prev_joint2) {
+                Joint2Set(joint2);
+                prev_joint2 = joint2;
+            }
+        }
+        else
+        {
+            printf("Invalid format!\n");
+        }
+    }
+
+    // Just setting joint3
+    else if (strncmp(str, "joint3", 6) == 0)
+    {
+        str += 7;
+
+        if (sscanf(str, "%3d", &joint3) == 1)
+        {
+            // Successfully parsed joint3
+            printf("Joint3 set: %d\n", joint3);
+
+            if (joint3 != prev_joint3) {
+                Joint3Set(joint3);
+                prev_joint3 = joint3;
+            }
+        }
+        else
+        {
+            printf("Invalid format!\n");
+        }
+    }
+
+    // Just setting joint4
+    else if (strncmp(str, "joint4", 6) == 0)
+    {
+        str += 7;
+
+        if (sscanf(str, "%3d", &joint4) == 1)
+        {
+            // Successfully parsed joint4
+            printf("Joint4 set: %d\n", joint4);
+
+            if (joint4 != prev_joint4) {
+                Joint4Set(joint4);
+                prev_joint4 = joint4;
+            }
+        }
+        else
+        {
+            printf("Invalid format!\n");
+        }
+    }
+
+    // Just setting joint5
+    else if (strncmp(str, "joint5", 6) == 0)
+    {
+        str += 7;
+
+        if (sscanf(str, "%3d", &joint5) == 1)
+        {
+            // Successfully parsed joint5
+            printf("Joint5 set: %d\n", joint5);
+
+            if (joint5 != prev_joint5) {
+                Joint5Set(joint5);
+                prev_joint5 = joint5;
+            }
+        }
+        else
+        {
+            printf("Invalid format!\n");
+        }
+    }
+
+    // Just setting actuator
+    else if (strncmp(str, "actuator", 8) == 0)
+    {
+        str += 9;
+
+        if (sscanf(str, "%3d", &actuator) == 1)
+        {
+            // Successfully parsed joint5
+            printf("Actuator set: %d\n", actuator);
+
+            if (actuator != actuator) {
+                ActuatorSet(actuator);
+                prev_actuator = actuator;
+            }
+        }
+        else
+        {
+            printf("Invalid format!\n");
+        }
+    }
+
+    // Set Home 
+    else if (strncmp(str, "home", 4) == 0)
+    {
+        str += 5;
+        
+        HomeSet();
+        
+        printf("Set all joints home\n");
+
+    }
+
+    // Prints all joints
+    else if (strncmp(str, "print", 5) == 0)
+    {
+       printf("Joint1: %d\n", joint1);
+       printf("Joint2: %d\n", joint2);
+       printf("Joint3: %d\n", joint3);
+       printf("Joint4: %d\n", joint4);
+       printf("Joint5: %d\n", joint5);
+       printf("Actuator: %d\n", actuator);
+    }
+
+    // Echoes string if no keywords are sent
     else
     {
-      printf("Received: %s\n", str);
+        printf("Received: %s\n", str);
     }
 }
+
 
 void ToggleLEDs(){
   /* Toggle LEDs sequentially */
@@ -259,6 +454,50 @@ void ToggleLEDs(){
   HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
   HAL_Delay(100);
   
+}
+
+void HomeSet(){
+  //Set all joints to home
+  joint1 = JOINT1_HOME;
+  Joint1Set(joint1);
+  joint2 = JOINT2_HOME;
+  Joint2Set(joint2);
+  joint3 = JOINT3_HOME;
+  Joint3Set(joint3);
+  joint4 = JOINT4_HOME;
+  Joint4Set(joint4);
+  joint5 = JOINT5_HOME;
+  Joint5Set(joint5);
+  actuator = ACTUATOR_HOME;
+  ActuatorSet(actuator);
+}
+
+void Joint1Set(int theta){
+  //Set joint
+}
+
+void Joint2Set(int theta){
+  //Set joint
+}
+
+void Joint3Set(int theta){
+  //Set joint
+
+}
+
+void Joint4Set(int theta){
+  //Set joint
+
+}
+
+void Joint5Set(int theta){
+  //Set joint
+
+}
+
+void ActuatorSet(int theta){
+  //Set joint
+
 }
 /* USER CODE END 4 */
 
