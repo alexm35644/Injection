@@ -4,7 +4,7 @@ import time
 import tkinter as tk
 
 # Configure the serial port
-ser = serial.Serial('/dev/tty.usbserial-1110', 115200)  # Update port and baud rate
+ser = serial.Serial('/dev/tty.usbserial-1120', 115200)  # Update port and baud rate
 if ser.is_open:
     print("Port is open!")
 else:
@@ -12,7 +12,7 @@ else:
 
 # Global variable for shared value
 value_lock = threading.Lock()  # Lock for thread-safe access to the value
-value = 0
+value = 180
 delay = 0.05  # 50ms
 
 # Function to send data
@@ -48,8 +48,8 @@ def update_value(new_value):
 def reset_value(slider):
     global value
     with value_lock:
-        value = 0
-    slider.set(0)  # Update the slider position
+        value = 180
+    slider.set(value)  # Update the slider position
 
 # Create Tkinter GUI
 def create_gui():
@@ -67,8 +67,8 @@ def create_gui():
     # Create a slider
     slider = tk.Scale(
         root,
-        from_=-255,
-        to=255,
+        from_=0,
+        to=360,
         resolution=1,
         orient=tk.HORIZONTAL,
         command=update_value,
@@ -82,7 +82,7 @@ def create_gui():
     # Add a button to reset the value to zero
     reset_button = tk.Button(
         root,
-        text="Reset to Zero",
+        text="Reset to 180",
         command=lambda: reset_value(slider),
         bg="lightgray",
         padx=10,
