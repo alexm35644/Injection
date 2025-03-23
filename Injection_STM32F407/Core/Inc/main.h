@@ -57,8 +57,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_Pin GPIO_PIN_13
-#define LED_GPIO_Port GPIOC
+#define DC3_IN1_Pin GPIO_PIN_2
+#define DC3_IN1_GPIO_Port GPIOE
+#define DC3_IN2_Pin GPIO_PIN_3
+#define DC3_IN2_GPIO_Port GPIOE
+#define DC4_IN1_Pin GPIO_PIN_4
+#define DC4_IN1_GPIO_Port GPIOE
+#define DC4_IN2_Pin GPIO_PIN_5
+#define DC4_IN2_GPIO_Port GPIOE
 #define ADC1_IN0_ACT_Pin GPIO_PIN_0
 #define ADC1_IN0_ACT_GPIO_Port GPIOA
 #define ADC1_IN1_ROT1_Pin GPIO_PIN_1
@@ -79,6 +85,20 @@ void Error_Handler(void);
 #define DIR2_GPIO_Port GPIOE
 #define DIR4_Pin GPIO_PIN_15
 #define DIR4_GPIO_Port GPIOE
+#define DC1_IN1_Pin GPIO_PIN_12
+#define DC1_IN1_GPIO_Port GPIOB
+#define DC1_IN2_Pin GPIO_PIN_13
+#define DC1_IN2_GPIO_Port GPIOB
+#define DC2_IN1_Pin GPIO_PIN_14
+#define DC2_IN1_GPIO_Port GPIOB
+#define DC2_IN2_Pin GPIO_PIN_15
+#define DC2_IN2_GPIO_Port GPIOB
+#define LED_Pin GPIO_PIN_12
+#define LED_GPIO_Port GPIOD
+#define DIAG2_Pin GPIO_PIN_9
+#define DIAG2_GPIO_Port GPIOC
+#define DIAG1_Pin GPIO_PIN_8
+#define DIAG1_GPIO_Port GPIOA
 #define DIR6_Pin GPIO_PIN_7
 #define DIR6_GPIO_Port GPIOD
 

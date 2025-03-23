@@ -27,6 +27,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <stdlib.h>
 
 /* USER CODE END Includes */
 
@@ -48,12 +50,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+int i = 0; 
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 
 /* USER CODE END PFP */
 
@@ -101,6 +105,9 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
+  MX_TIM4_Init();
+  MX_TIM3_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -112,6 +119,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    if (i>10){
+      i = 0;
+    }
+    printf("Hello! Test value is %i\n", i);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    HAL_Delay(500);
+    i++;
+
   }
   /* USER CODE END 3 */
 }
@@ -162,6 +177,19 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+  * @brief  Retargets the C library printf function to the USART.
+  * @retval None
+  */
+ PUTCHAR_PROTOTYPE
+ {
+   /* Place your implementation of fputc here */
+   /* e.g. write a character to the USART1 and Loop until the end of transmission */
+   HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+ 
+   return ch;
+ }
 
 /* USER CODE END 4 */
 
