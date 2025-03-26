@@ -2,19 +2,33 @@ import serial
 import threading
 import time
 import tkinter as tk
-import glob 
 
-# Find all devices that match the pattern for usbmodem
-usbmodem_devices = glob.glob('/dev/tty.usbmodem*')
+import serial.tools.list_ports
 
-if usbmodem_devices:
-    # Select the first device found
-    device = usbmodem_devices[0]
-    print(f"Using device: {device}")
-    ser = serial.Serial(device, 115200)  # Adjust baud rate as needed
+# List all available serial ports
+ports = list(serial.tools.list_ports.comports())
+
+# Check if there are any available USB serial ports
+found = False
+for port in ports:
+    if 'USB' in port.description:  # Looking for ports related to USB devices
+        try:
+            ser = serial.Serial(port.device, 115200)  # Open the port with the found USB serial
+            print(f"Connected to {port.device}")
+            found = True
+            break  # Exit the loop once we find a working port
+        except serial.SerialException:
+            print(f"Failed to open port {port.device}")
+            continue
+
+if not found:
+    print("No USB serial devices found.")
 else:
-    print("No usbmodem devices found!")
-    ser = None  # Handle case where no device is found
+    # You can now interact with the serial device
+    if ser.is_open:
+        print("Port is open!")
+    else:
+        print("Failed to open port.")
 
 # Global variable for shared value
 value_lock = threading.Lock()  # Lock for thread-safe access to the value

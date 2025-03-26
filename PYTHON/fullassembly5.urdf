@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="fullassembly5">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.053715 0.047182 0.09331"
+        rpy="0 0 0" />
+      <mass
+        value="10.606" />
+      <inertia
+        ixx="0.09813"
+        ixy="0.00018536"
+        ixz="-0.029638"
+        iyy="0.14094"
+        iyz="0.00032039"
+        izz="0.063954" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="0.010357 0.037705 0.001221"
+        rpy="0 0 0" />
+      <mass
+        value="0.86222" />
+      <inertia
+        ixx="0.0016122"
+        ixy="1.0682E-07"
+        ixz="-2.3802E-07"
+        iyy="0.0023627"
+        iyz="-8.6824E-06"
+        izz="0.001221" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint0"
+    type="revolute">
+    <origin
+      xyz="0.00033091 -0.00092157 0.25793"
+      rpy="1.5708 0 0.3894" />
+    <parent
+      link="base_link" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="10"
+      velocity="52.46" />
+  </joint>
+  <link
+    name="link2">
+    <inertial>
+      <origin
+        xyz="0.0041147 0.073596 0.062549"
+        rpy="0 0 0" />
+      <mass
+        value="0.52381" />
+      <inertia
+        ixx="0.0010413"
+        ixy="-0.00013141"
+        ixz="-5.6721E-05"
+        iyy="0.00026456"
+        iyz="-0.00023625"
+        izz="0.0010634" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1"
+    type="revolute">
+    <origin
+      xyz="0 0.070004 -0.014641"
+      rpy="-0.79233 -1.2924 0.54378" />
+    <parent
+      link="link1" />
+    <child
+      link="link2" />
+    <axis
+      xyz="0.23517 0.22254 -0.94614" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="6.856"
+      velocity="1.047" />
+  </joint>
+  <link
+    name="link3">
+    <inertial>
+      <origin
+        xyz="-0.089897 0.0037746 -0.023187"
+        rpy="0 0 0" />
+      <mass
+        value="0.39534" />
+      <inertia
+        ixx="0.00015531"
+        ixy="-4.579E-06"
+        ixz="1.4719E-06"
+        iyy="0.00057009"
+        iyz="4.3717E-06"
+        izz="0.00066457" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2"
+    type="revolute">
+    <origin
+      xyz="0.025136 0.14777 0.041004"
+      rpy="-2.8496 -0.20478 -0.1505" />
+    <parent
+      link="link2" />
+    <child
+      link="link3" />
+    <axis
+      xyz="0.0025844 0.033832 0.99942" />
+    <limit
+      lower="0"
+      upper="1.57"
+      effort="6.856"
+      velocity="1.047" />
+  </joint>
+  <link
+    name="link4">
+    <inertial>
+      <origin
+        xyz="-0.15151 -0.0068472 0.023898"
+        rpy="0 0 0" />
+      <mass
+        value="0.32199" />
+      <inertia
+        ixx="0.00010589"
+        ixy="-7.8296E-05"
+        ixz="4.206E-05"
+        iyy="0.00099879"
+        iyz="1.9649E-05"
+        izz="0.0010415" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint3"
+    type="revolute">
+    <origin
+      xyz="-0.11542 -0.012866 -0.022933"
+      rpy="1.8903 0.10054 -0.0054901" />
+    <parent
+      link="link3" />
+    <child
+      link="link4" />
+    <axis
+      xyz="0.99511 0.087411 -0.045954" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="6.856"
+      velocity="1.047" />
+  </joint>
+  <link
+    name="end_effector">
+    <inertial>
+      <origin
+        xyz="-0.014826 -0.039264 0.016443"
+        rpy="0 0 0" />
+      <mass
+        value="0.11054" />
+      <inertia
+        ixx="7.8336E-05"
+        ixy="-3.1687E-06"
+        ixz="1.5306E-06"
+        iyy="1.9443E-05"
+        iyz="1.9571E-05"
+        izz="6.9972E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/end_effector.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/end_effector.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="end_effector_joint"
+    type="revolute">
+    <origin
+      xyz="-0.29136 -0.025594 0.013455"
+      rpy="0.0019114 0.026035 0.071012" />
+    <parent
+      link="link4" />
+    <child
+      link="end_effector" />
+    <axis
+      xyz="0.013037 0.34498 0.93852" />
+    <limit
+      lower="-2.5"
+      upper="2.5"
+      effort="6.856"
+      velocity="1.047" />
+  </joint>
+  <link
+    name="camera_link">
+    <inertial>
+      <origin
+        xyz="-0.0020989 0.089813 -0.010018"
+        rpy="0 0 0" />
+      <mass
+        value="0.2669" />
+      <inertia
+        ixx="0.00011453"
+        ixy="-4.0506E-08"
+        ixz="1.1341E-05"
+        iyy="0.0007716"
+        iyz="2.0554E-07"
+        izz="0.00076373" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/camera_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fullassembly5/meshes/camera_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

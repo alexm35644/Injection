@@ -2,6 +2,7 @@
 
 #define STEP_PIN PA0
 #define DIR_PIN PA1
+#define EN_PIN PA2
 #define LED_PIN PC13  // Onboard LED to indicate activity
 #define LIMIT_SWITCH_PIN PC14  // Limit switch pin
 #define FORWARD 1 // Away from limit switch
@@ -40,6 +41,7 @@ void setup() {
   pinMode(STEP_PIN, OUTPUT);  // Step pin as output
   pinMode(DIR_PIN, OUTPUT);   // Direction pin as output
   pinMode(LED_PIN, OUTPUT);   // LED pin as output
+  pinMode(EN_PIN, OUTPUT);    // Enable pin as output
   pinMode(LIMIT_SWITCH_PIN, INPUT_PULLUP);  // Limit switch as input with internal pull-up
 
   Serial.println("Manual Stepper Control Started");
@@ -147,6 +149,7 @@ void rotateMotor(bool clockwise, int steps, int variable_delay) {
 void homingRoutine() {
   Serial.println("Starting Homing Routine...");
   digitalWrite(DIR_PIN, REVERSE);
+  digitalWrite(EN_PIN, LOW);  // Enable the motor driver
 
   while (digitalRead(LIMIT_SWITCH_PIN) == LOW) {  // While the limit switch is not triggered
     digitalWrite(STEP_PIN, HIGH);
