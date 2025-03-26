@@ -1,0 +1,8 @@
+# Justfile
+
+# Command to say hello
+hello:
+    echo "Hello, world!"
+
+flash: 
+    python3 -m pyocd flash -t  STM32F407VGTx build/DISC1.elf
