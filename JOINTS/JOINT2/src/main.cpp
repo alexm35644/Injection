@@ -5,11 +5,14 @@
 #define LED 13
 #define LEFT 0
 #define RIGHT 1
-#define PWM_LOWER_LIMIT -255
-#define PWM_UPPER_LIMIT  255
-#define TOLERANCE 5
+#define PWM_LOWER_LIMIT -127
+#define PWM_UPPER_LIMIT  127
+#define TOLERANCE 2
 
 
+// String
+String inputString = ""; // To store the serial input
+bool inputComplete = false;
 
 // Motor connections
 const int enA = 9;
@@ -17,7 +20,7 @@ const int in1 = 8;
 const int in2 = 7;
 
 // PID parameters
-double Pk1 = 5;  // Speed it gets there
+double Pk1 = 1;  // Speed it gets there
 double Ik1 = 0;
 double Dk1 = 0.05;
 double Setpoint, Input, Output;
@@ -31,25 +34,23 @@ int error = 0;
 
 // Timing variables
 unsigned long previousMillis = 0;
-const unsigned long interval = 100; // Interval in milliseconds
+const unsigned long interval = 1; // Interval in milliseconds
 
 int encoderValue, inputValue, thetaValue;
-int homeAngle = 2050; // 90 deg angle straight up
 int angleDifference = 0;
 int angleValue = 0;
-int leftLimit = 2700;
-int rightLimit = 1350;
+int leftLimit = 3390;
+int rightLimit = 2000;
 int pwmValue; 
 
-int thetaTarget = 180; // Target angle (0–360 degrees)
-int previousTarget = 180; 
+int home = 45;
+int thetaTarget = home; // Target angle (0–360 degrees)
+int previousTarget = home; 
 
-// Quadrant stuff 
-int numberOfTurns = 0;
-float totalAngle = 0;
 
 int readAS5600Angle();
 void moveMotor(int pwmValue, bool direction);
+void readSerial();
 
 void setup() {
   // Set motor pins as outputs
@@ -86,46 +87,90 @@ void loop() {
     Serial.println(encoderValue);
   }
 
-  // Read serial input for target angle
-  if (Serial.available() > 0) {
-    thetaTarget = Serial.parseInt(); // Parse integer directly
-    thetaTarget = constrain(thetaTarget, 0, 360); // Constrain to valid range
-    if (previousTarget != thetaTarget){
+  readSerial();
+
+  Setpoint = thetaTarget;
+  
+  // Map the current angle value to the PID Input range (-255 to 255)
+  Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
+  // Run PID process to get Output value
+  myPID.Compute();
+  // Move the motor based on PID output
+  Serial.print("target:");
+  Serial.println(map(thetaTarget, 0, 180, rightLimit, leftLimit));
+  Serial.print("PID Output: ");
+  Serial.println(Output);
+  if(abs(thetaTarget - Input) > TOLERANCE){
+    if (Output > 1) { // Move right
+      if(encoderValue > rightLimit-1000){
+        if(encoderValue < 2600){
+          pwmValue = Output;
+          pwmValue = constrain(pwmValue, 80, PWM_UPPER_LIMIT);
+          moveMotor(pwmValue, RIGHT);
+        } else {
+          pwmValue = Output;
+          pwmValue = constrain(pwmValue, 60, PWM_UPPER_LIMIT);
+          moveMotor(pwmValue, RIGHT);
+        }
+      }else{
+        pwmValue = 0;
+        moveMotor(pwmValue, RIGHT);
+      }
+    } else if (Output < -1) { // Move left
+      if(encoderValue < leftLimit+200){
+        if(encoderValue < 2600){
+          pwmValue = abs(Output);
+          pwmValue = constrain(pwmValue, 40, PWM_UPPER_LIMIT);
+          moveMotor(pwmValue, LEFT);
+        }else{
+          pwmValue = abs(Output);
+          pwmValue = constrain(pwmValue, 60, PWM_UPPER_LIMIT);
+          moveMotor(pwmValue, LEFT);
+        }
+      }else{
+        pwmValue = 0;
+        moveMotor(pwmValue, LEFT);
+      }
+    } else { // Stop the motor
+        pwmValue = 0;
+        moveMotor(pwmValue, RIGHT);
+    }
+  } else{
+    pwmValue = 0;
+    moveMotor(pwmValue, RIGHT);
+  }
+  
+  Serial.print("PWM Value: ");
+  Serial.println(pwmValue);
+  
+  // delay(50); // Remove after testing
+}
+
+void readSerial() {
+  while (Serial.available() > 0) {
+    char receivedChar = Serial.read();
+    
+    if (receivedChar == '\n') { // End of input
+      inputComplete = true;
+      break;
+    } else if (isDigit(receivedChar) || receivedChar == '-') {
+      inputString += receivedChar; // Append to the input string
+    }
+  }
+
+  // Process the input if complete
+  if (inputComplete) {
+    int parsedValue = inputString.toInt(); // Convert string to integer
+    thetaTarget = constrain(parsedValue, 0, 180); // Constrain to valid range
+    if (previousTarget != thetaTarget) {
       Serial.print("Theta Target: ");
       Serial.println(thetaTarget);
     }
-    previousTarget = thetaTarget; 
-  }
+    previousTarget = thetaTarget;
 
-  // Adjust the angle value with wrap-around handling
-  angleValue = (encoderValue + angleDifference) % 4096;
-  if (angleValue < 0) {
-    angleValue += 4096; // Handle negative wrap
-  }
-
-  // Map the target angle (0–360) to PID Setpoint range (-255 to 255)
-  Setpoint = map(thetaTarget, 0, 360, PWM_LOWER_LIMIT, PWM_UPPER_LIMIT);
-
-  // Map the current angle value to the PID Input range (-255 to 255)
-  Input = map(angleValue, leftLimit, rightLimit, PWM_LOWER_LIMIT, PWM_UPPER_LIMIT);
-
-  // Adjust PID parameters dynamically (optional)
-  myPID.SetTunings(Pk1, Ik1, Dk1);
-
-  // Run PID process to get Output value
-  myPID.Compute();
-
-  // Move the motor based on PID output
-  if (Output > 1) { // Move right
-    pwmValue = Output;
-    pwmValue = constrain(pwmValue, 80, PWM_UPPER_LIMIT);
-    moveMotor(pwmValue, RIGHT);
-  } else if (Output < -1) { // Move left
-    pwmValue = abs(Output);
-    pwmValue = constrain(pwmValue, 80, PWM_UPPER_LIMIT);
-    moveMotor(pwmValue, LEFT);
-  } else { // Stop the motor
-    moveMotor(0, LEFT);
+    // Reset input handling
+    inputString = "";
+    inputComplete = false;
   }
 }
 
@@ -149,6 +194,8 @@ int readAS5600Angle() {
 
   return rawAngle;
 }
+
+
 
 void moveMotor(int pwmValue, bool direction) {
   if (pwmValue == 0) {

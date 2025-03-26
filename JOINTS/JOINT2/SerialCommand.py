@@ -32,7 +32,7 @@ else:
 
 # Global variable for shared value
 value_lock = threading.Lock()  # Lock for thread-safe access to the value
-value = 180
+value = 90
 delay = 0.05  # 50ms
 
 # Function to send data
@@ -68,7 +68,7 @@ def update_value(new_value):
 def reset_value(slider):
     global value
     with value_lock:
-        value = 180
+        value = 90
     slider.set(value)  # Update the slider position
 
 # Create Tkinter GUI
@@ -88,7 +88,7 @@ def create_gui():
     slider = tk.Scale(
         root,
         from_=0,
-        to=360,
+        to=180,
         resolution=1,
         orient=tk.HORIZONTAL,
         command=update_value,
@@ -102,7 +102,7 @@ def create_gui():
     # Add a button to reset the value to zero
     reset_button = tk.Button(
         root,
-        text="Reset to 180",
+        text="Reset to 90",
         command=lambda: reset_value(slider),
         bg="lightgray",
         padx=10,
