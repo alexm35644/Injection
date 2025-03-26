@@ -1,0 +1,8 @@
+serial:
+	@sh -c '
+	DEVICE=$(ls /dev/tty.usbserial-* 2>/dev/null | head -n 1)
+	if [ -z "$DEVICE" ]; then
+		echo "No serial device found!" && exit 1
+	fi
+	picocom --echo $DEVICE -b 115200
+	'
