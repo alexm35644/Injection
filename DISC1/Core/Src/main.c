@@ -40,8 +40,8 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define JOINT1_HOME 90
-#define JOINT2_HOME 0
+#define JOINT1_HOME 0
+#define JOINT2_HOME 45
 #define JOINT3_HOME 0
 #define JOINT4_HOME 0 
 #define JOINT5_HOME 0
@@ -259,7 +259,7 @@ void SystemClock_Config(void)
             uart_buffer[buffer_index++] = rx_byte;
 
             // Check for newline or carriage return
-            if (rx_byte == '\r') 
+            if (rx_byte == '\n') 
             {
                 uart_buffer[buffer_index] = '\0'; // Null-terminate the string
                 buffer_index = 0;                // Reset the index for the next string
@@ -316,14 +316,17 @@ void ProcessReceivedString(char *str)
             if (joint1 != prev_joint1) {
                 // send to joint
                 prev_joint1 = joint1;
+                Joint1Set(joint1);
             }
             if (joint2 != prev_joint2) {
                 // send to joint
                 prev_joint2 = joint2;
+                Joint2Set(joint2);
             }
             if (joint3 != prev_joint3) {
                 // send to joint
                 prev_joint3 = joint3;
+                Joint3Set(joint3);
             }
             if (joint4 != prev_joint4) {
                 // send to joint
