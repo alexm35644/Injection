@@ -1,0 +1,2 @@
+flash:
+    python3 -m pyocd flash -t STM32F103C8 .pio/build/bluepill_f103c8/firmware.elf

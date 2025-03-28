@@ -40,11 +40,11 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define JOINT1_HOME 0
-#define JOINT2_HOME 0
-#define JOINT3_HOME 0
-#define JOINT4_HOME 0 
-#define JOINT5_HOME 0
+#define JOINT1_HOME 90
+#define JOINT2_HOME 90
+#define JOINT3_HOME 90
+#define JOINT4_HOME 90
+#define JOINT5_HOME 90
 #define ACTUATOR_HOME 0
 
 #define MAIN_UART &huart1
@@ -199,13 +199,18 @@ int main(void)
   MX_TIM3_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
+  
+
+  printf("System Initialized\r\n");
+
+  HomeSet();
+
   HAL_UART_Receive_IT(MAIN_UART, &rx_byte, 1); // Start receiving single bytes in interrupt mode
   HAL_UART_Receive_IT(JOINT1_UART, &rx_byte1, 1); // Start receiving single bytes in interrupt mode
   HAL_UART_Receive_IT(JOINT2_UART, &rx_byte2, 1); // Start receiving single bytes in interrupt mode
   HAL_UART_Receive_IT(JOINT3_UART, &rx_byte3, 1); // Start receiving single bytes in interrupt mode
   HAL_UART_Receive_IT(JOINT4_UART, &rx_byte4, 1); // Start receiving single bytes in interrupt mode
   HAL_UART_Receive_IT(JOINT5_UART, &rx_byte5, 1); // Start receiving single bytes in interrupt mode
-  printf("System Initialized\r\n");
 
 
   /* USER CODE END 2 */
