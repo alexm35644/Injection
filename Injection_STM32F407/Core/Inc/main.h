@@ -65,6 +65,8 @@ void Error_Handler(void);
 #define DC4_IN1_GPIO_Port GPIOE
 #define DC4_IN2_Pin GPIO_PIN_5
 #define DC4_IN2_GPIO_Port GPIOE
+#define LED_Pin GPIO_PIN_13
+#define LED_GPIO_Port GPIOC
 #define ADC1_IN0_ACT_Pin GPIO_PIN_0
 #define ADC1_IN0_ACT_GPIO_Port GPIOA
 #define ADC1_IN1_ROT1_Pin GPIO_PIN_1
@@ -93,8 +95,6 @@ void Error_Handler(void);
 #define DC2_IN1_GPIO_Port GPIOB
 #define DC2_IN2_Pin GPIO_PIN_15
 #define DC2_IN2_GPIO_Port GPIOB
-#define LED_Pin GPIO_PIN_12
-#define LED_GPIO_Port GPIOD
 #define DIAG2_Pin GPIO_PIN_9
 #define DIAG2_GPIO_Port GPIOC
 #define DIAG1_Pin GPIO_PIN_8

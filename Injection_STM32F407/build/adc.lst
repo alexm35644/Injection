@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
   28:Core/Src/adc.c **** 
   29:Core/Src/adc.c **** /* ADC1 init function */
   30:Core/Src/adc.c **** void MX_ADC1_Init(void)
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 2
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 2
 
 
   31:Core/Src/adc.c **** {
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
   50:Core/Src/adc.c ****   hadc1.Init.DiscontinuousConvMode = DISABLE;
   64              		.loc 1 50 3 is_stmt 1 view .LVU13
   65              		.loc 1 50 36 is_stmt 0 view .LVU14
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 3
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 3
 
 
   66 001c 80F82030 		strb	r3, [r0, #32]
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
  104 0040 0293     		str	r3, [sp, #8]
   67:Core/Src/adc.c ****   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
  105              		.loc 1 67 3 is_stmt 1 view .LVU36
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 4
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 4
 
 
  106              		.loc 1 67 7 is_stmt 0 view .LVU37
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
  152              	.LFB240:
   76:Core/Src/adc.c **** 
   77:Core/Src/adc.c **** void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 5
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 5
 
 
   78:Core/Src/adc.c **** {
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
  102:Core/Src/adc.c ****   /* USER CODE END ADC1_MspInit 1 */
  103:Core/Src/adc.c ****   }
  104:Core/Src/adc.c **** }
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 6
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 6
 
 
  183              		.loc 1 104 1 view .LVU50
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
  226              	.LBE3:
   89:Core/Src/adc.c ****     /**ADC1 GPIO Configuration
  227              		.loc 1 89 5 view .LVU62
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 7
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 7
 
 
   95:Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
  109:Core/Src/adc.c ****   if(adcHandle->Instance==ADC1)
  273              		.loc 1 109 3 is_stmt 1 view .LVU73
  274              		.loc 1 109 15 is_stmt 0 view .LVU74
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 8
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 8
 
 
  275 0002 0268     		ldr	r2, [r0]
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
  307              	.LFE241:
  309              		.global	hadc1
  310              		.section	.bss.hadc1,"aw",%nobits
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 9
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 9
 
 
  311              		.align	2
@@ -500,22 +500,22 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 1
  325              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h"
  326              		.file 10 "Core/Inc/adc.h"
  327              		.file 11 "Core/Inc/main.h"
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s 			page 10
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s 			page 10
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 adc.c
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:21     .text.MX_ADC1_Init:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:27     .text.MX_ADC1_Init:00000000 MX_ADC1_Init
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:137    .text.MX_ADC1_Init:00000060 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:314    .bss.hadc1:00000000 hadc1
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:144    .text.HAL_ADC_MspInit:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:150    .text.HAL_ADC_MspInit:00000000 HAL_ADC_MspInit
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:249    .text.HAL_ADC_MspInit:00000064 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:254    .text.HAL_ADC_MspDeInit:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:260    .text.HAL_ADC_MspDeInit:00000000 HAL_ADC_MspDeInit
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:303    .text.HAL_ADC_MspDeInit:00000020 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//cc3pl8mG.s:311    .bss.hadc1:00000000 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:21     .text.MX_ADC1_Init:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:27     .text.MX_ADC1_Init:00000000 MX_ADC1_Init
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:137    .text.MX_ADC1_Init:00000060 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:314    .bss.hadc1:00000000 hadc1
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:144    .text.HAL_ADC_MspInit:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:150    .text.HAL_ADC_MspInit:00000000 HAL_ADC_MspInit
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:249    .text.HAL_ADC_MspInit:00000064 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:254    .text.HAL_ADC_MspDeInit:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:260    .text.HAL_ADC_MspDeInit:00000000 HAL_ADC_MspDeInit
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:303    .text.HAL_ADC_MspDeInit:00000020 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccSCARrt.s:311    .bss.hadc1:00000000 $d
 
 UNDEFINED SYMBOLS
 HAL_ADC_Init
