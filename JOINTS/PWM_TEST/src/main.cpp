@@ -1,24 +1,21 @@
 #include <Arduino.h>
 #include <Wire.h>
+#include <stm32f1xx_hal.h>
 
-#define LED 13
+#define LED PC13
 #define LEFT 0
 #define RIGHT 1
 #define PWM_LOWER_LIMIT -127
 #define PWM_UPPER_LIMIT  127
 #define TOLERANCE 5
 
-
-
 // String
 String inputString = ""; // To store the serial input
 bool inputComplete = false;
 
 // Motor connections
-const int enA = 9;
-const int in1 = 8;
-const int in2 = 7;
-
+const int in1 = PB0;
+const int in2 = PB1;
 
 // AS5600 I2C address
 #define AS5600_I2C_ADDR 0x36
@@ -48,11 +45,35 @@ int readAS5600Angle();
 void moveMotor(int pwmValue, bool direction);
 void readSerial();
 
+// Timer handle
+TIM_HandleTypeDef htim3;
+
+void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim) {
+  if (htim->Instance == TIM3) {
+    // Enable TIM3 clock
+    __HAL_RCC_TIM3_CLK_ENABLE();
+    
+    // Enable GPIOB clock for PWM pin (PB0 for TIM3_CH1)
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    
+    // Configure GPIO pin for PWM output
+    GPIO_InitStruct.Pin = GPIO_PIN_0;  // PB0 (TIM3_CH1)
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;  // Alternate function push-pull
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  }
+}
+
+
 void setup() {
+
   // Set motor pins as outputs
-  pinMode(enA, OUTPUT);
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
+
+
 
   // Start serial communication
   Serial.begin(115200);
@@ -60,10 +81,30 @@ void setup() {
   // Initialize I2C communication
   Wire.begin();
 
-  // Initialize motor to off
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  analogWrite(enA, 0);
+  // Initialize the HAL library
+  HAL_Init();
+
+  // Configure TIM3 for PWM generation
+  __HAL_RCC_TIM3_CLK_ENABLE();  // Enable TIM3 clock
+  
+  // Timer configuration
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 72 - 1;  // Prescaler for 1 MHz timer clock (72 MHz / 72)
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 1000 - 1;  // Period for 1 kHz PWM frequency
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  HAL_TIM_PWM_Init(&htim3);
+  
+  // Configure PWM channel
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 600;  // 50% duty cycle (half of 1000)
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_3);  // Channel 1 (PB0)
+
+  // Start PWM signal
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 
 }
 
@@ -177,16 +218,14 @@ void moveMotor(int pwmValue, bool direction) {
     // Stop the motor
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
-    analogWrite(enA, 0);
   } else if (direction == LEFT) {
     // Rotate left
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
-    analogWrite(enA, pwmValue);
+    analogWrite(in1, pwmValue);
+    analogWrite(in2, LOW);
+
   } else if (direction == RIGHT) {
     // Rotate right
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-    analogWrite(enA, pwmValue);
+    analogWrite(in1, LOW);
+    analogWrite(in2, pwmValue);
   }
 }

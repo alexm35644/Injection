@@ -113,7 +113,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    printf("Calling AS5600...\n");
+    //printf("Calling AS5600...\n");
     raw_angle = AS5600_ReadRawAngle();
 
     char str[6]; // Enough to hold the maximum value of uint16_t (65535) + null terminator
@@ -276,13 +276,13 @@ static void MX_GPIO_Init(void)
 
  uint16_t AS5600_ReadRawAngle(void)
 {
-    printf("starting I2C scan...\n");
+    //printf("starting I2C scan...\n");
     uint8_t buffer[2] = {0};
     uint16_t raw_angle = 0;
 
     if (__HAL_I2C_GET_FLAG(&hi2c1, I2C_FLAG_BUSY))
     {
-      printf("I2C bus busy, resetting...\n");
+      //printf("I2C bus busy, resetting...\n");
       HAL_I2C_DeInit(&hi2c1);
       HAL_I2C_Init(&hi2c1);
 

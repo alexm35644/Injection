@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+#include "stm32f1xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -49,6 +49,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -59,28 +61,6 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin GPIO_PIN_13
 #define LED_GPIO_Port GPIOC
-#define ADC1_IN0_ACT_Pin GPIO_PIN_0
-#define ADC1_IN0_ACT_GPIO_Port GPIOA
-#define ADC1_IN1_ROT1_Pin GPIO_PIN_1
-#define ADC1_IN1_ROT1_GPIO_Port GPIOA
-#define ADC1_IN2_ROT2_Pin GPIO_PIN_2
-#define ADC1_IN2_ROT2_GPIO_Port GPIOA
-#define DIR5_Pin GPIO_PIN_6
-#define DIR5_GPIO_Port GPIOA
-#define IN1_Pin GPIO_PIN_5
-#define IN1_GPIO_Port GPIOC
-#define IN2_Pin GPIO_PIN_0
-#define IN2_GPIO_Port GPIOB
-#define DIR3_Pin GPIO_PIN_8
-#define DIR3_GPIO_Port GPIOE
-#define DIR1_Pin GPIO_PIN_10
-#define DIR1_GPIO_Port GPIOE
-#define DIR2_Pin GPIO_PIN_12
-#define DIR2_GPIO_Port GPIOE
-#define DIR4_Pin GPIO_PIN_15
-#define DIR4_GPIO_Port GPIOE
-#define DIR6_Pin GPIO_PIN_7
-#define DIR6_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
 
