@@ -4,7 +4,7 @@
 #include <stm32f1xx_hal.h>
 
 // Uncomment the line below to enable debugging
-// #define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
   #define DEBUG_PRINT(x) Serial.print(x)
@@ -20,7 +20,7 @@
 #define LEFT 0
 #define RIGHT 1
 #define PWM_LOWER_LIMIT -500
-#define PWM_UPPER_LIMIT  500
+#define PWM_UPPER_LIMIT  600
 #define TOLERANCE 1
 
 
@@ -33,7 +33,7 @@ const int in1 = PB0;
 const int in2 = PB1;
 
 // PID parameters
-double Pk1 = 2;  // Speed it gets there
+double Pk1 = 3;  // Speed it gets there
 double Ik1 = 0;
 double Dk1 = 0.05;
 double Setpoint, Input, Output;
@@ -57,7 +57,7 @@ int rightLimit = 3100; // 33 degrees
 int leftLimit = 1767;  // 150 degrees
 int pwmValue; 
 
-int home = 45;
+int home = 140;
 int thetaTarget = home; // Target angle (0–150 degrees)
 int previousTarget = home; 
 
@@ -105,7 +105,7 @@ void setup() {
 
   // PID Setup
   myPID.SetMode(AUTOMATIC);              
-  myPID.SetOutputLimits(PWM_LOWER_LIMIT, PWM_UPPER_LIMIT);
+  myPID.SetOutputLimits(-255, 255);
   myPID.SetSampleTime(20);
 
   
@@ -119,8 +119,12 @@ void loop() {
 
     // Read and print the AS5600 angle
     encoderValue = AS5600_ReadRawAngle();
-    Serial.print("AS5600 Angle: ");
-    Serial.println(encoderValue);
+    DEBUG_PRINT("J2 A ");
+    DEBUG_PRINT(encoderValue);
+    DEBUG_PRINT(" T ");
+    DEBUG_PRINT(thetaTarget);
+    DEBUG_PRINT(" P ");
+    DEBUG_PRINTLN(pwmValue);
   }
 
   readSerial();
@@ -132,24 +136,20 @@ void loop() {
   // Run PID process to get Output value
   myPID.Compute();
   // Move the motor based on PID output
-  DEBUG_PRINT("target:");
-  DEBUG_PRINTLN(map(thetaTarget, 33, 150, rightLimit, leftLimit));
-  DEBUG_PRINT("PID Output: ");
-  DEBUG_PRINTLN(Output);
   if(abs(thetaTarget - Input) > TOLERANCE){
-    if (Output > 1) { // Move right
+    if (Output < 1) { // Move right
       if(encoderValue < rightLimit+200){
           pwmValue = Output;
-          pwmValue = constrain(pwmValue, 0, PWM_UPPER_LIMIT);
+          pwmValue = map(pwmValue, 0, 255, 80, PWM_UPPER_LIMIT);
           moveMotor(pwmValue, RIGHT);       
       }else{
         pwmValue = 0;
         moveMotor(pwmValue, RIGHT);
       }
-    } else if (Output < -1) { // Move left
+    } else if (Output > -1) { // Move left
       if(encoderValue > leftLimit-200){
           pwmValue = abs(Output);
-          pwmValue = constrain(pwmValue, 0, PWM_UPPER_LIMIT);
+          pwmValue = map(pwmValue, 0, 255, 120, PWM_UPPER_LIMIT);
           moveMotor(pwmValue, LEFT);
       }else{
         pwmValue = 0;
@@ -163,9 +163,6 @@ void loop() {
     pwmValue = 0;
     moveMotor(pwmValue, RIGHT);
   }
-  
-  DEBUG_PRINT("PWM Value: ");
-  DEBUG_PRINTLN(pwmValue);
   
   DEBUG_DELAY(50); // Remove after testing
 }
@@ -203,9 +200,6 @@ void readSerial() {
     thetaTarget = constrain(parsedValue, 0, 150);
     inputString = "";
     inputComplete = false;
-    DEBUG_PRINT("Parsed Value: ");
-    DEBUG_PRINT(thetaTarget);
-    DEBUG_PRINT("\n");
   }
 }
 
