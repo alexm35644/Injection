@@ -4,7 +4,7 @@
 #include <stm32f1xx_hal.h>
 
 // Uncomment the line below to enable debugging
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
   #define DEBUG_PRINT(x) Serial.print(x)
@@ -20,7 +20,7 @@
 #define LEFT 0
 #define RIGHT 1
 #define PWM_LOWER_LIMIT -500
-#define PWM_UPPER_LIMIT  500
+#define PWM_UPPER_LIMIT  600
 #define TOLERANCE 1
 
 
@@ -33,7 +33,7 @@ const int in1 = PB0;
 const int in2 = PB1;
 
 // PID parameters
-double Pk1 = 2;  // Speed it gets there
+double Pk1 = 1.5;  // Speed it gets there
 double Ik1 = 0;
 double Dk1 = 0.05;
 double Setpoint, Input, Output;
@@ -53,8 +53,8 @@ const unsigned long interval = 50; // Interval in milliseconds
 int encoderValue, inputValue, thetaValue;
 int angleDifference = 0;
 int angleValue = 0;
-int rightLimit = 3100; // Needs to be tuned
-int leftLimit = 1767;  // Needs to be tuned
+int rightLimit = 2300; // 0 degrees
+int leftLimit = 300;  // 180 degrees
 int pwmValue; 
 
 int home = 90;
@@ -95,6 +95,8 @@ void setup() {
 
   // Initialize I2C communication
   I2C_Init(); // Initialize I2C
+  // Serial.print("I2C Initialized");
+  // Serial.print('\n');
   TIM3_INIT(); // Initialize TIM3 for PWM
 
 
@@ -103,11 +105,8 @@ void setup() {
 
   // PID Setup
   myPID.SetMode(AUTOMATIC);              
-  myPID.SetOutputLimits(PWM_LOWER_LIMIT, PWM_UPPER_LIMIT);
+  myPID.SetOutputLimits(-255, 255);
   myPID.SetSampleTime(20);
-
-
-
 
   
 }
@@ -120,8 +119,12 @@ void loop() {
 
     // Read and print the AS5600 angle
     encoderValue = AS5600_ReadRawAngle();
-    DEBUG_PRINT("AS5600 Angle: ");
-    DEBUG_PRINTLN(encoderValue);
+    DEBUG_PRINT("J3 A ");
+    DEBUG_PRINT(encoderValue);
+    DEBUG_PRINT(" T ");
+    DEBUG_PRINT(thetaTarget);
+    DEBUG_PRINT(" P ");
+    DEBUG_PRINTLN(pwmValue);
   }
 
   readSerial();
@@ -129,24 +132,24 @@ void loop() {
   Setpoint = thetaTarget;
   
   // Map the encoder value to a range of 0 to 150
-  Input = map(encoderValue, rightLimit, leftLimit, 33, 150);
+  Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
   // Run PID process to get Output value
   myPID.Compute();
   // Move the motor based on PID output
   if(abs(thetaTarget - Input) > TOLERANCE){
-    if (Output > 1) { // Move right
+    if (Output < 1) { // Move right
       if(encoderValue < rightLimit+200){
           pwmValue = Output;
-          pwmValue = constrain(pwmValue, 0, PWM_UPPER_LIMIT);
+          pwmValue = map(pwmValue, 0, 255, 80, PWM_UPPER_LIMIT);
           moveMotor(pwmValue, RIGHT);       
       }else{
         pwmValue = 0;
         moveMotor(pwmValue, RIGHT);
       }
-    } else if (Output < -1) { // Move left
+    } else if (Output > -1) { // Move left
       if(encoderValue > leftLimit-200){
           pwmValue = abs(Output);
-          pwmValue = constrain(pwmValue, 0, PWM_UPPER_LIMIT);
+          pwmValue = map(pwmValue, 0, 255, 120, PWM_UPPER_LIMIT);
           moveMotor(pwmValue, LEFT);
       }else{
         pwmValue = 0;
@@ -277,6 +280,7 @@ void I2C_Init() {
   
   // Initialize I2C
   if (HAL_I2C_Init(&hi2c1) != HAL_OK) {
+      // Serial.println("I2C initialization failed!");
       while (1);
   }
 }
@@ -302,6 +306,8 @@ uint16_t AS5600_ReadRawAngle() {
   uint8_t buffer[2];
   uint16_t raw_angle = 0;
 
+  // Print status before each read attempt
+  // Serial.println("Attempting I2C read...");
 
   // Reset the I2C bus after each attempt
   HAL_I2C_DeInit(&hi2c1);
