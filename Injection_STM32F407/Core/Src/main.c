@@ -40,12 +40,17 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define JOINT1_HOME 90
+#define JOINT1_HOME 0
 #define JOINT2_HOME 90
-#define JOINT3_HOME 90
-#define JOINT4_HOME 90
-#define JOINT5_HOME 90
+#define JOINT3_HOME 135
+#define JOINT4_HOME 0
+#define JOINT5_HOME 15
 #define ACTUATOR_HOME 0
+#define INJECT 1
+#define STOP 0
+#define RETRACT 2
+#define INJECTION_LIMIT 1200
+#define RETRACTION_LIMIT 3800
 
 #define MAIN_UART &huart1
 #define MAIN_UART_INSTANCE USART1
@@ -65,6 +70,17 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+#define DEBUG
+
+#ifdef DEBUG
+  #define DEBUG_PRINT(x) Serial.print(x)
+  #define DEBUG_PRINTLN(x) Serial.println(x)
+  #define DEBUG_DELAY(x) delay(x)
+#else
+  #define DEBUG_PRINT(x)
+  #define DEBUG_PRINTLN(x)
+  #define DEBUG_DELAY(x)
+#endif
 
 /* USER CODE END PM */
 
@@ -93,6 +109,9 @@ int joint4 = JOINT4_HOME;
 int joint5 = JOINT5_HOME; 
 int actuator = ACTUATOR_HOME; 
 int ledFlag = 0; 
+int injectFlag = RETRACT; 
+volatile uint8_t buttonState = 0; // Global variable to track the button state
+
 
 int prev_joint1, prev_joint2, prev_joint3, prev_joint4, prev_joint5, prev_actuator; 
 
@@ -149,6 +168,17 @@ void SystemClock_Config(void);
     } \
 } while (0)
 
+void Joint1Set(int theta);
+void Joint2Set(int theta);
+void Joint3Set(int theta);
+void Joint4Set(int theta);
+void Joint5Set(int theta);
+void ActuatorSet(int theta);
+int ActuatorStatus();
+void homeSet(); 
+uint16_t Read_ADC_PA0();
+void inject(int direction);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -203,6 +233,12 @@ int main(void)
 
   printf("System Initialized\r\n");
 
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1); // Start PWM on PD12
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2); // Start PWM on PD13  
+
+  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);  // 50% duty cycle on PD12
+  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);  // 25% duty cycle on PD13
+
   HomeSet();
 
   HAL_UART_Receive_IT(MAIN_UART, &rx_byte, 1); // Start receiving single bytes in interrupt mode
@@ -223,12 +259,36 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+    // Joint4 Button
+    if(buttonState){
+      Joint4Set(28);
+      buttonState = 0; 
+    }
+
+    // Actuator Test 
 
 
+    
+    
+    uint16_t adcValue = Read_ADC_PA0();
+    HAL_Delay(1);
+    if(injectFlag == RETRACT){
+      if(adcValue>=RETRACTION_LIMIT){
+        inject(STOP);
+        injectFlag = STOP; 
+      } 
+    }
+    else if(injectFlag == INJECT){
+      if(adcValue<INJECTION_LIMIT){
+        inject(STOP);
+        injectFlag = STOP; 
+      }
+    } 
 
   }
   /* USER CODE END 3 */
-}
+  }
+
 
 /**
   * @brief System Clock Configuration
@@ -252,9 +312,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 72;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 3;
+  RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -266,10 +326,10 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -352,14 +412,7 @@ void SystemClock_Config(void)
                 // Copy received string to the global buffer for main loop access
                 strcpy((char *)received_string, (char *)uart_buffer);
 
-                if(strcmp("print", (char* )received_string)){
-                  ProcessReceivedString((char *)received_string);
-                  strcpy((char *)previous_string, (char *)received_string);
-                }
-                else if(strcmp((char *)received_string, (char *)previous_string)){
-                  ProcessReceivedString((char *)received_string);
-                  strcpy((char *)previous_string, (char *)received_string);
-                }
+                ProcessReceivedString(received_string);
 
                 
             }
@@ -628,10 +681,10 @@ void ProcessReceivedString(char *str)
             // Successfully parsed joint1
             printf("Joint1 set: %d\r\n", joint1);
 
-            if (joint1 != prev_joint1) {
+            //if (joint1 != prev_joint1) {
                 Joint1Set(joint1);
                 prev_joint1 = joint1;
-            }
+            //}
         }
         else
         {
@@ -649,10 +702,10 @@ void ProcessReceivedString(char *str)
             // Successfully parsed joint2
             printf("Joint2 set: %d\r\n", joint2);
 
-            if (joint2 != prev_joint2) {
+            //if (joint2 != prev_joint2) {
                 Joint2Set(joint2);
                 prev_joint2 = joint2;
-            }
+            //}
         }
         else
         {
@@ -670,10 +723,10 @@ void ProcessReceivedString(char *str)
             // Successfully parsed joint3
             printf("Joint3 set: %d\r\n", joint3);
 
-            if (joint3 != prev_joint3) {
+            //if (joint3 != prev_joint3) {
                 Joint3Set(joint3);
                 prev_joint3 = joint3;
-            }
+            //}
         }
         else
         {
@@ -691,10 +744,10 @@ void ProcessReceivedString(char *str)
             // Successfully parsed joint4
             printf("Joint4 set: %d\r\n", joint4);
 
-            if (joint4 != prev_joint4) {
+            //if (joint4 != prev_joint4) {
                 Joint4Set(joint4);
                 prev_joint4 = joint4;
-            }
+            //}
         }
         else
         {
@@ -712,10 +765,10 @@ void ProcessReceivedString(char *str)
             // Successfully parsed joint5
             printf("Joint5 set: %d\r\n", joint5);
 
-            if (joint5 != prev_joint5) {
+            //if (joint5 != prev_joint5) {
                 Joint5Set(joint5);
                 prev_joint5 = joint5;
-            }
+            //}
         }
         else
         {
@@ -733,10 +786,10 @@ void ProcessReceivedString(char *str)
             // Successfully parsed joint5
             printf("Actuator set: %d\r\n", actuator);
 
-            if (actuator != actuator) {
+            //if (actuator != actuator) {
                 ActuatorSet(actuator);
                 prev_actuator = actuator;
-            }
+            //}
         }
         else
         {
@@ -806,6 +859,27 @@ void ProcessReceivedString(char *str)
        printf("Actuator: %d\r\n", actuator);
     }
 
+    else if (strncmp(str, "inject", 6)== 0)
+    {
+        injectFlag = INJECT; 
+        inject(INJECT);
+        printf("injecting...\r\n");
+    }
+
+    else if (strncmp(str, "retract", 7)== 0)
+    {
+        injectFlag = RETRACT; 
+        inject(RETRACT);
+        printf("retracting...\r\n");
+    }
+    
+    else if (strncmp(str, "stop", 4) == 0)
+    {
+        injectFlag = STOP; 
+        inject(STOP);
+        printf("stopped.\r\n"); 
+    }
+
     // Echoes string if no keywords are sent
     else
     {
@@ -828,8 +902,6 @@ void HomeSet(){
   Joint4Set(joint4);
   joint5 = JOINT5_HOME;
   Joint5Set(joint5);
-  actuator = ACTUATOR_HOME;
-  ActuatorSet(actuator);
 }
 
 void Joint1Set(int theta){
@@ -866,6 +938,37 @@ void ActuatorSet(int theta){
 int ActuatorStatus(){
   // Get actuator status
   return 0;
+}
+
+uint16_t Read_ADC_PA0() {
+  uint16_t adcValue = 0;
+
+  // Start ADC Conversion
+  HAL_ADC_Start(&hadc1);
+
+  // Wait for conversion to complete
+  if (HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY) == HAL_OK) {
+      // Read the ADC value
+      adcValue = HAL_ADC_GetValue(&hadc1);
+  }
+
+  // Stop ADC (optional)
+  HAL_ADC_Stop(&hadc1);
+
+  return adcValue;
+}
+
+void inject(int direction){
+  if(direction == INJECT){
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);  // 25% duty cycle on PD13
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 16384);  // 25% duty cycle on PD13
+  } else if (direction == RETRACT){
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 16384);  // 25% duty cycle on PD13
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);  // 25% duty cycle on PD13
+  } else if (direction == STOP){
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);  // 25% duty cycle on PD13
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);  // 25% duty cycle on PD13
+  }
 }
 
 /* USER CODE END 4 */

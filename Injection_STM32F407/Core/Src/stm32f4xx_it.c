@@ -42,6 +42,10 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
+extern volatile uint8_t buttonState; // Declare this variable globally in main.c
+static uint32_t lastInterruptTime = 0;
+static uint32_t debounceDelay = 200;  
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -202,6 +206,36 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f4xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles EXTI line0 interrupt.
+  */
+void EXTI0_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
+  uint32_t currentTime = HAL_GetTick();  // Get the current time in ms
+
+  // Check if the interrupt was triggered by the correct pin (USER1_Pin)
+  if (__HAL_GPIO_EXTI_GET_IT(USER1_Pin) != RESET) 
+  {
+      __HAL_GPIO_EXTI_CLEAR_IT(USER1_Pin);  // Clear the interrupt flag
+
+      // Check if enough time has passed since the last interrupt
+      if (currentTime - lastInterruptTime > debounceDelay)
+      {
+          // Toggle the button state
+          buttonState = 1;
+
+          // Update the last interrupt time
+          lastInterruptTime = currentTime;
+      }
+  }
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(USER1_Pin);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+  /* USER CODE END EXTI0_IRQn 1 */
+}
 
 /**
   * @brief This function handles USART1 global interrupt.
