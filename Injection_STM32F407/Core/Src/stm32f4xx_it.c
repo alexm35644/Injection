@@ -43,6 +43,7 @@
 /* USER CODE BEGIN PV */
 
 extern volatile uint8_t buttonState; // Declare this variable globally in main.c
+extern volatile uint8_t footPedalFlag; 
 static uint32_t lastInterruptTime = 0;
 static uint32_t debounceDelay = 200;  
 

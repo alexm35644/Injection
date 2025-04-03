@@ -63,7 +63,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(DIR5_GPIO_Port, DIR5_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, DC1_IN1_Pin|DC1_IN2_Pin|DC2_IN1_Pin|DC2_IN2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, DC1_IN2_Pin|DC2_IN1_Pin|DC2_IN2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DIR6_GPIO_Port, DIR6_Pin, GPIO_PIN_RESET);
@@ -97,8 +97,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(USER1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DC1_IN1_Pin DC1_IN2_Pin DC2_IN1_Pin DC2_IN2_Pin */
-  GPIO_InitStruct.Pin = DC1_IN1_Pin|DC1_IN2_Pin|DC2_IN1_Pin|DC2_IN2_Pin;
+  /*Configure GPIO pin : USER2_Pin */
+  GPIO_InitStruct.Pin = USER2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(USER2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : DC1_IN2_Pin DC2_IN1_Pin DC2_IN2_Pin */
+  GPIO_InitStruct.Pin = DC1_IN2_Pin|DC2_IN1_Pin|DC2_IN2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

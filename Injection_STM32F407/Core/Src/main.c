@@ -49,8 +49,7 @@
 #define INJECT 1
 #define STOP 0
 #define RETRACT 2
-#define INJECTION_LIMIT 1200
-#define RETRACTION_LIMIT 3800
+
 
 #define MAIN_UART &huart1
 #define MAIN_UART_INSTANCE USART1
@@ -111,9 +110,16 @@ int actuator = ACTUATOR_HOME;
 int ledFlag = 0; 
 int injectFlag = RETRACT; 
 volatile uint8_t buttonState = 0; // Global variable to track the button state
+volatile uint8_t footPedalFlag = 0;   // Global footpedal flag 
+
+int injectionLimit = 2600;
+int retractionLimit = 4050;
 
 
 int prev_joint1, prev_joint2, prev_joint3, prev_joint4, prev_joint5, prev_actuator; 
+
+uint32_t buttonPressTime = 0;
+int buttonHeld = 0;
 
 
 /* USER CODE END PV */
@@ -177,7 +183,7 @@ void ActuatorSet(int theta);
 int ActuatorStatus();
 void homeSet(); 
 uint16_t Read_ADC_PA0();
-void inject(int direction);
+void inject(int direction, int adc);
 
 /* USER CODE END PFP */
 
@@ -239,6 +245,8 @@ int main(void)
   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);  // 50% duty cycle on PD12
   __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);  // 25% duty cycle on PD13
 
+  uint16_t adcValue = Read_ADC_PA0();
+
   HomeSet();
 
   HAL_UART_Receive_IT(MAIN_UART, &rx_byte, 1); // Start receiving single bytes in interrupt mode
@@ -258,32 +266,46 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-    // Joint4 Button
-    if(buttonState){
-      Joint4Set(28);
-      buttonState = 0; 
-    } 
-    
     uint16_t adcValue = Read_ADC_PA0();
     HAL_Delay(1);
-    if(injectFlag == RETRACT){
-      if(adcValue>=RETRACTION_LIMIT){
-        inject(STOP);
-        injectFlag = STOP; 
+
+    // Joint4 Button
+    // if(buttonState){
+    //   Joint4Set(28);
+    //   buttonState = 0; 
+    // } 
+
+    // Foot pedal 
+
+    if (!HAL_GPIO_ReadPin(USER2_GPIO_Port, USER2_Pin)) { 
+      injectSequence();
+      if (!buttonHeld) { 
+          buttonHeld = 1; 
+          buttonPressTime = HAL_GetTick(); // Record the press time
+          injectFlag = RETRACT; 
+          inject(RETRACT, adcValue);
       } 
-    }
-    else if(injectFlag == INJECT){
-      if(adcValue<INJECTION_LIMIT){
-        inject(STOP);
-        injectFlag = STOP; 
+      
+      if (HAL_GetTick() - buttonPressTime >= 4000) { // Check if held for 1 second
+        injectFlag = INJECT; 
+        inject(INJECT, adcValue);
       }
-    } 
+  } else {
+      buttonHeld = 0;
+      buttonPressTime = 0; // Reset timer
+      HomeSet();
+      injectFlag = RETRACT; 
+      inject(RETRACT, adcValue);
+  }
+    
+    
+    
+
+    
 
   }
   /* USER CODE END 3 */
-  }
-
+}
 
 /**
   * @brief System Clock Configuration
@@ -857,22 +879,25 @@ void ProcessReceivedString(char *str)
     else if (strncmp(str, "inject", 6)== 0)
     {
         injectFlag = INJECT; 
-        inject(INJECT);
         printf("injecting...\r\n");
     }
 
     else if (strncmp(str, "retract", 7)== 0)
     {
         injectFlag = RETRACT; 
-        inject(RETRACT);
         printf("retracting...\r\n");
     }
     
     else if (strncmp(str, "stop", 4) == 0)
     {
         injectFlag = STOP; 
-        inject(STOP);
         printf("stopped.\r\n"); 
+    }
+    else if (strncmp(str, "sequence", 8) == 0)
+    {
+        printf("inject sequence.../r/n");
+        injectSequence(); 
+        
     }
 
     // Echoes string if no keywords are sent
@@ -897,6 +922,10 @@ void HomeSet(){
   Joint4Set(joint4);
   joint5 = JOINT5_HOME;
   Joint5Set(joint5);
+  injectFlag = RETRACT; 
+
+
+  
 }
 
 void Joint1Set(int theta){
@@ -953,18 +982,41 @@ uint16_t Read_ADC_PA0() {
   return adcValue;
 }
 
-void inject(int direction){
-  if(direction == INJECT){
-    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);  // 25% duty cycle on PD13
-    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 16384);  // 25% duty cycle on PD13
-  } else if (direction == RETRACT){
-    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 16384);  // 25% duty cycle on PD13
-    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);  // 25% duty cycle on PD13
-  } else if (direction == STOP){
-    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);  // 25% duty cycle on PD13
-    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);  // 25% duty cycle on PD13
+void injectSequence(){
+  Joint5Set(18);
+  //HAL_Delay(500);
+  Joint4Set(28);
+  //HAL_Delay(500);
+  Joint3Set(70);
+  //HAL_Delay(500);
+  Joint2Set(4);
+}
+
+void inject(int direction, int adc) {
+  if (direction == INJECT) {
+      if (adc > injectionLimit) {
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);       // 0% duty cycle
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 16384);   // 25% duty cycle
+      } else {
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);
+          injectFlag = STOP;
+      }
+  } else if (direction == RETRACT) {
+      if (adc < retractionLimit) {
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 16384);   // 25% duty cycle
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);       // 0% duty cycle
+      } else {
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);
+          __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);
+          injectFlag = STOP;
+      }
+  } else if (direction == STOP) {
+      __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 0);
+      __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);
   }
 }
+
 
 /* USER CODE END 4 */
 

@@ -88,8 +88,8 @@ void Error_Handler(void);
 #define DIR2_GPIO_Port GPIOE
 #define DIR4_Pin GPIO_PIN_15
 #define DIR4_GPIO_Port GPIOE
-#define DC1_IN1_Pin GPIO_PIN_12
-#define DC1_IN1_GPIO_Port GPIOB
+#define USER2_Pin GPIO_PIN_12
+#define USER2_GPIO_Port GPIOB
 #define DC1_IN2_Pin GPIO_PIN_13
 #define DC1_IN2_GPIO_Port GPIOB
 #define DC2_IN1_Pin GPIO_PIN_14
