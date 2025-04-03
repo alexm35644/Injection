@@ -2932,32 +2932,32 @@ LOAD /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
 LOAD /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a
 LOAD /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+fp/hard/libgcc.a
 
-.debug_info     0x00000000    0x20eb2
- .debug_info    0x00000000     0x2f34 build/main.o
- .debug_info    0x00002f34      0x91f build/gpio.o
- .debug_info    0x00003853      0xbbf build/adc.o
- .debug_info    0x00004412      0xb82 build/i2c.o
- .debug_info    0x00004f94     0x1691 build/tim.o
- .debug_info    0x00006625     0x1402 build/usart.o
- .debug_info    0x00007a27      0xafe build/usb_otg.o
- .debug_info    0x00008525      0x981 build/stm32f4xx_it.o
- .debug_info    0x00008ea6      0x2eb build/stm32f4xx_hal_msp.o
- .debug_info    0x00009191     0x1045 build/stm32f4xx_hal_adc.o
- .debug_info    0x0000a1d6      0xc0a build/stm32f4xx_hal_rcc.o
- .debug_info    0x0000ade0      0x848 build/stm32f4xx_hal_gpio.o
- .debug_info    0x0000b628      0xbce build/stm32f4xx_hal_dma.o
- .debug_info    0x0000c1f6     0x11e0 build/stm32f4xx_hal_cortex.o
- .debug_info    0x0000d3d6      0xafa build/stm32f4xx_hal.o
- .debug_info    0x0000ded0     0x3c10 build/stm32f4xx_hal_i2c.o
- .debug_info    0x00011ae0     0x41a0 build/stm32f4xx_hal_tim.o
- .debug_info    0x00015c80     0x1da5 build/stm32f4xx_hal_tim_ex.o
- .debug_info    0x00017a25     0x439d build/stm32f4xx_hal_uart.o
- .debug_info    0x0001bdc2     0x1f37 build/stm32f4xx_hal_pcd.o
- .debug_info    0x0001dcf9     0x2202 build/stm32f4xx_ll_usb.o
- .debug_info    0x0001fefb      0x5b3 build/system_stm32f4xx.o
- .debug_info    0x000204ae      0x18c build/sysmem.o
- .debug_info    0x0002063a      0x848 build/syscalls.o
- .debug_info    0x00020e82       0x30 build/startup_stm32f407xx.o
+.debug_info     0x00000000    0x20eb3
+ .debug_info    0x00000000     0x2f35 build/main.o
+ .debug_info    0x00002f35      0x91f build/gpio.o
+ .debug_info    0x00003854      0xbbf build/adc.o
+ .debug_info    0x00004413      0xb82 build/i2c.o
+ .debug_info    0x00004f95     0x1691 build/tim.o
+ .debug_info    0x00006626     0x1402 build/usart.o
+ .debug_info    0x00007a28      0xafe build/usb_otg.o
+ .debug_info    0x00008526      0x981 build/stm32f4xx_it.o
+ .debug_info    0x00008ea7      0x2eb build/stm32f4xx_hal_msp.o
+ .debug_info    0x00009192     0x1045 build/stm32f4xx_hal_adc.o
+ .debug_info    0x0000a1d7      0xc0a build/stm32f4xx_hal_rcc.o
+ .debug_info    0x0000ade1      0x848 build/stm32f4xx_hal_gpio.o
+ .debug_info    0x0000b629      0xbce build/stm32f4xx_hal_dma.o
+ .debug_info    0x0000c1f7     0x11e0 build/stm32f4xx_hal_cortex.o
+ .debug_info    0x0000d3d7      0xafa build/stm32f4xx_hal.o
+ .debug_info    0x0000ded1     0x3c10 build/stm32f4xx_hal_i2c.o
+ .debug_info    0x00011ae1     0x41a0 build/stm32f4xx_hal_tim.o
+ .debug_info    0x00015c81     0x1da5 build/stm32f4xx_hal_tim_ex.o
+ .debug_info    0x00017a26     0x439d build/stm32f4xx_hal_uart.o
+ .debug_info    0x0001bdc3     0x1f37 build/stm32f4xx_hal_pcd.o
+ .debug_info    0x0001dcfa     0x2202 build/stm32f4xx_ll_usb.o
+ .debug_info    0x0001fefc      0x5b3 build/system_stm32f4xx.o
+ .debug_info    0x000204af      0x18c build/sysmem.o
+ .debug_info    0x0002063b      0x848 build/syscalls.o
+ .debug_info    0x00020e83       0x30 build/startup_stm32f407xx.o
 
 .debug_abbrev   0x00000000     0x3a34
  .debug_abbrev  0x00000000      0x3b8 build/main.o
@@ -3091,32 +3091,32 @@ LOAD /Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_ranges  0x00001330       0x98 build/syscalls.o
  .debug_ranges  0x000013c8       0x20 build/startup_stm32f407xx.o
 
-.debug_line     0x00000000    0x19647
- .debug_line    0x00000000      0xeb5 build/main.o
- .debug_line    0x00000eb5      0x2bd build/gpio.o
- .debug_line    0x00001172      0x31a build/adc.o
- .debug_line    0x0000148c      0x2d4 build/i2c.o
- .debug_line    0x00001760      0x8db build/tim.o
- .debug_line    0x0000203b      0x712 build/usart.o
- .debug_line    0x0000274d      0x2fd build/usb_otg.o
- .debug_line    0x00002a4a      0x389 build/stm32f4xx_it.o
- .debug_line    0x00002dd3      0x160 build/stm32f4xx_hal_msp.o
- .debug_line    0x00002f33     0x10b7 build/stm32f4xx_hal_adc.o
- .debug_line    0x00003fea      0xbc8 build/stm32f4xx_hal_rcc.o
- .debug_line    0x00004bb2      0x6ff build/stm32f4xx_hal_gpio.o
- .debug_line    0x000052b1      0xe3d build/stm32f4xx_hal_dma.o
- .debug_line    0x000060ee      0x834 build/stm32f4xx_hal_cortex.o
- .debug_line    0x00006922      0x571 build/stm32f4xx_hal.o
- .debug_line    0x00006e93     0x547b build/stm32f4xx_hal_i2c.o
- .debug_line    0x0000c30e     0x4778 build/stm32f4xx_hal_tim.o
- .debug_line    0x00010a86     0x1ac1 build/stm32f4xx_hal_tim_ex.o
- .debug_line    0x00012547     0x34c7 build/stm32f4xx_hal_uart.o
- .debug_line    0x00015a0e     0x145b build/stm32f4xx_hal_pcd.o
- .debug_line    0x00016e69     0x1f62 build/stm32f4xx_ll_usb.o
- .debug_line    0x00018dcb      0x258 build/system_stm32f4xx.o
- .debug_line    0x00019023      0x1cf build/sysmem.o
- .debug_line    0x000191f2      0x3e2 build/syscalls.o
- .debug_line    0x000195d4       0x73 build/startup_stm32f407xx.o
+.debug_line     0x00000000    0x19643
+ .debug_line    0x00000000      0xeb1 build/main.o
+ .debug_line    0x00000eb1      0x2bd build/gpio.o
+ .debug_line    0x0000116e      0x31a build/adc.o
+ .debug_line    0x00001488      0x2d4 build/i2c.o
+ .debug_line    0x0000175c      0x8db build/tim.o
+ .debug_line    0x00002037      0x712 build/usart.o
+ .debug_line    0x00002749      0x2fd build/usb_otg.o
+ .debug_line    0x00002a46      0x389 build/stm32f4xx_it.o
+ .debug_line    0x00002dcf      0x160 build/stm32f4xx_hal_msp.o
+ .debug_line    0x00002f2f     0x10b7 build/stm32f4xx_hal_adc.o
+ .debug_line    0x00003fe6      0xbc8 build/stm32f4xx_hal_rcc.o
+ .debug_line    0x00004bae      0x6ff build/stm32f4xx_hal_gpio.o
+ .debug_line    0x000052ad      0xe3d build/stm32f4xx_hal_dma.o
+ .debug_line    0x000060ea      0x834 build/stm32f4xx_hal_cortex.o
+ .debug_line    0x0000691e      0x571 build/stm32f4xx_hal.o
+ .debug_line    0x00006e8f     0x547b build/stm32f4xx_hal_i2c.o
+ .debug_line    0x0000c30a     0x4778 build/stm32f4xx_hal_tim.o
+ .debug_line    0x00010a82     0x1ac1 build/stm32f4xx_hal_tim_ex.o
+ .debug_line    0x00012543     0x34c7 build/stm32f4xx_hal_uart.o
+ .debug_line    0x00015a0a     0x145b build/stm32f4xx_hal_pcd.o
+ .debug_line    0x00016e65     0x1f62 build/stm32f4xx_ll_usb.o
+ .debug_line    0x00018dc7      0x258 build/system_stm32f4xx.o
+ .debug_line    0x0001901f      0x1cf build/sysmem.o
+ .debug_line    0x000191ee      0x3e2 build/syscalls.o
+ .debug_line    0x000195d0       0x73 build/startup_stm32f407xx.o
 
 .debug_str      0x00000000     0x61cb
  .debug_str     0x00000000     0x61cb build/main.o

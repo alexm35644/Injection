@@ -42,9 +42,9 @@
 
 #define JOINT1_HOME 0
 #define JOINT2_HOME 90
-#define JOINT3_HOME 135
+#define JOINT3_HOME 180
 #define JOINT4_HOME 0
-#define JOINT5_HOME 15
+#define JOINT5_HOME 40
 #define ACTUATOR_HOME 0
 #define INJECT 1
 #define STOP 0
@@ -263,12 +263,7 @@ int main(void)
     if(buttonState){
       Joint4Set(28);
       buttonState = 0; 
-    }
-
-    // Actuator Test 
-
-
-    
+    } 
     
     uint16_t adcValue = Read_ADC_PA0();
     HAL_Delay(1);
