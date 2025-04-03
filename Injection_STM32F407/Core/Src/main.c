@@ -184,6 +184,7 @@ int ActuatorStatus();
 void homeSet(); 
 uint16_t Read_ADC_PA0();
 void inject(int direction, int adc);
+void HomeSetUser();
 
 /* USER CODE END PFP */
 
@@ -247,7 +248,7 @@ int main(void)
 
   uint16_t adcValue = Read_ADC_PA0();
 
-  HomeSet();
+
 
   HAL_UART_Receive_IT(MAIN_UART, &rx_byte, 1); // Start receiving single bytes in interrupt mode
   HAL_UART_Receive_IT(JOINT1_UART, &rx_byte1, 1); // Start receiving single bytes in interrupt mode
@@ -261,50 +262,61 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
     uint16_t adcValue = Read_ADC_PA0();
     HAL_Delay(1);
 
-    // Joint4 Button
-    // if(buttonState){
-    //   Joint4Set(28);
-    //   buttonState = 0; 
-    // } 
-
-    // Foot pedal 
-
+    // Foot pedal or button press logic
     if (!HAL_GPIO_ReadPin(USER2_GPIO_Port, USER2_Pin)) { 
-      injectSequence();
-      if (!buttonHeld) { 
-          buttonHeld = 1; 
-          buttonPressTime = HAL_GetTick(); // Record the press time
-          injectFlag = RETRACT; 
-          inject(RETRACT, adcValue);
-      } 
-      
-      if (HAL_GetTick() - buttonPressTime >= 4000) { // Check if held for 1 second
-        injectFlag = INJECT; 
-        inject(INJECT, adcValue);
-      }
-  } else {
-      buttonHeld = 0;
-      buttonPressTime = 0; // Reset timer
-      HomeSet();
-      injectFlag = RETRACT; 
-      inject(RETRACT, adcValue);
-  }
-    
-    
-    
+        injectSequence();
 
-    
+        if (!buttonHeld) { 
+            buttonHeld = 1; 
+            buttonPressTime = HAL_GetTick(); // Record the press time
+            injectFlag = RETRACT; 
+            inject(RETRACT, adcValue);
+        } 
 
-  }
-  /* USER CODE END 3 */
+        if (HAL_GetTick() - buttonPressTime >= 4500) { // Check if held for 1 second
+            injectFlag = INJECT; 
+            inject(INJECT, adcValue);
+        }
+
+    } else {
+        buttonHeld = 0;
+        buttonPressTime = 0; // Reset timer
+        uint32_t lastMillis = HAL_GetTick(); // Start the delay timer
+
+        // Home set logic
+        joint1 = JOINT1_HOME;
+        Joint1Set(joint1);
+
+        joint2 = JOINT2_HOME;
+        Joint2Set(joint2);
+
+        // Wait for 1 second after setting joint2
+        while (HAL_GetTick() - lastMillis < 1000) {
+            // Loop here doing nothing but waiting for 1 second.
+        }
+
+        // Set the remaining joints after the delay
+        joint3 = JOINT3_HOME;
+        Joint3Set(joint3);
+        joint4 = JOINT4_HOME;
+        Joint4Set(joint4);
+        joint5 = JOINT5_HOME;
+        Joint5Set(joint5);
+        
+        injectFlag = RETRACT;  // Set the inject flag
+        inject(RETRACT, adcValue);  // Retract command
+        
+    }
+
+    /* USER CODE END 3 */
+}
 }
 
 /**
@@ -927,6 +939,39 @@ void HomeSet(){
 
   
 }
+void HomeSetUser() {
+  static uint32_t lastMillis = 0;
+  static uint8_t step = 0;  // To track which part of the process we are at.
+
+  if (step == 0) {
+      // Set Joint 1
+      joint1 = JOINT1_HOME;
+      Joint1Set(joint1);
+      step = 1;  // Move to the next step
+  } else if (step == 1) {
+      // Set Joint 2 and start a delay
+      joint2 = JOINT2_HOME;
+      Joint2Set(joint2);
+      lastMillis = HAL_GetTick();  // Start the 1-second delay
+      step = 2;  // Move to the next step
+  } else if (step == 2) {
+      // Wait for 1 second before proceeding
+      if (HAL_GetTick() - lastMillis >= 1000) {
+          // Once 1 second has passed, set the remaining joints
+          joint3 = JOINT3_HOME;
+          Joint3Set(joint3);
+          joint4 = JOINT4_HOME;
+          Joint4Set(joint4);
+          joint5 = JOINT5_HOME;
+          Joint5Set(joint5);
+          injectFlag = RETRACT;  // Set the inject flag
+
+          step = 0;  // Reset for the next time HomeSetUser() is called
+      }
+  }
+}
+
+
 
 void Joint1Set(int theta){
   printf_joint1("%d\r\n", theta);
