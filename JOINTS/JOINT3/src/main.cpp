@@ -19,9 +19,9 @@
 #define LED PC13
 #define LEFT 0
 #define RIGHT 1
-#define PWM_LOWER_LIMIT -500
-#define PWM_UPPER_LIMIT  600
-#define TOLERANCE 1
+#define PWM_LOWER_LIMIT -800
+#define PWM_UPPER_LIMIT  800
+#define TOLERANCE 3
 
 
 // String
@@ -53,11 +53,11 @@ const unsigned long interval = 50; // Interval in milliseconds
 int encoderValue, inputValue, thetaValue;
 int angleDifference = 0;
 int angleValue = 0;
-int rightLimit = 2300; // 0 degrees
-int leftLimit = 300;  // 180 degrees
+int rightLimit = 1200; // 0 degrees
+int leftLimit = 500;  // 180 degrees
 int pwmValue; 
 
-int home = 90;
+int home = 130;
 int thetaTarget = home; // Target angle (0–150 degrees)
 int previousTarget = home; 
 
@@ -133,38 +133,59 @@ void loop() {
   
   // Map the encoder value to a range of 0 to 150
   Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
-  // Run PID process to get Output value
-  myPID.Compute();
-  // Move the motor based on PID output
-  if(abs(thetaTarget - Input) > TOLERANCE){
-    if (Output < 1) { // Move right
-      if(encoderValue < rightLimit+200){
-          pwmValue = Output;
-          pwmValue = map(pwmValue, 0, 255, 80, PWM_UPPER_LIMIT);
-          moveMotor(pwmValue, RIGHT);       
-      }else{
-        pwmValue = 0;
-        moveMotor(pwmValue, RIGHT);
-      }
-    } else if (Output > -1) { // Move left
-      if(encoderValue > leftLimit-200){
-          pwmValue = abs(Output);
-          pwmValue = map(pwmValue, 0, 255, 120, PWM_UPPER_LIMIT);
-          moveMotor(pwmValue, LEFT);
-      }else{
-        pwmValue = 0;
+
+  int angleDifference = thetaTarget - Input; 
+
+  // Calculate angle difference
+  int Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
+  angleDifference = thetaTarget - Input;
+
+  
+
+  if (abs(angleDifference) > TOLERANCE) {
+    if (angleDifference > 0) { // CW
+        int pwmValue = map(abs(angleDifference), 0, 180, 100, 400); // Scale smoothly  
         moveMotor(pwmValue, LEFT);
-      }
-    } else { // Stop the motor
-        pwmValue = 0;
+    } else { // CCW
+        int pwmValue = map(abs(angleDifference), 0, 180, 500, 800); // Scale smoothly  
         moveMotor(pwmValue, RIGHT);
     }
-  } else{
-    pwmValue = 0;
-    moveMotor(pwmValue, RIGHT);
-  }
+    } else {
+        moveMotor(0, RIGHT); // Stop motor
+    }
   
-  DEBUG_DELAY(50); // Remove after testing
+  // // Run PID process to get Output value
+  // myPID.Compute();
+  // // Move the motor based on PID output
+  // if(abs(thetaTarget - Input) > TOLERANCE){
+  //   if (Output < 1) { // Move right
+  //     if(encoderValue < rightLimit+200){
+  //         pwmValue = Output;
+  //         pwmValue = map(pwmValue, 0, 255, 600, PWM_UPPER_LIMIT);
+  //         moveMotor(pwmValue, RIGHT);       
+  //     }else{
+  //       pwmValue = 0;
+  //       moveMotor(pwmValue, RIGHT);
+  //     }
+  //   } else if (Output > -1) { // Move left
+  //     if(encoderValue > leftLimit-200){
+  //         pwmValue = abs(Output);
+  //         pwmValue = map(pwmValue, 0, 255, 400, PWM_UPPER_LIMIT);
+  //         moveMotor(pwmValue, LEFT);
+  //     }else{
+  //       pwmValue = 0;
+  //       moveMotor(pwmValue, LEFT);
+  //     }
+  //   } else { // Stop the motor
+  //       pwmValue = 0;
+  //       moveMotor(pwmValue, RIGHT);
+  //   }
+  // } else{
+  //   pwmValue = 0;
+  //   moveMotor(pwmValue, RIGHT);
+  // }
+  
+  // DEBUG_DELAY(50); // Remove after testing
 }
 
 void moveMotor(int pwmValue, bool direction) {
@@ -197,7 +218,7 @@ void readSerial() {
 
   if (inputComplete) {
     int parsedValue = inputString.toInt();
-    thetaTarget = constrain(parsedValue, 0, 150);
+    thetaTarget = constrain(parsedValue, 0, 180);
     inputString = "";
     inputComplete = false;
   }

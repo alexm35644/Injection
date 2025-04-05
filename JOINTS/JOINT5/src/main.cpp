@@ -4,7 +4,7 @@
 #include <stm32f1xx_hal.h>
 
 // Uncomment the line below to enable debugging
-#define DEBUG
+// #define DEBUG
 
 #ifdef DEBUG
   #define DEBUG_PRINT(x) Serial.print(x)

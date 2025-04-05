@@ -11,13 +11,12 @@ I2C_HandleTypeDef hi2c1;
 // Function to initialize I2C
 void I2C_Init() {
     __HAL_RCC_I2C1_CLK_ENABLE();
-    
-    // GPIOB clock enable for PB6 (SCL) and PB7 (SDA)
     __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_AFIO_REMAP_I2C1_ENABLE();
     
-    // Configure PB6 and PB7 for I2C
+    // Configure PB8 and PB9 for I2C
     GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD; // Open-drain mode for I2C
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -34,7 +33,7 @@ void I2C_Init() {
     
     // Initialize I2C
     if (HAL_I2C_Init(&hi2c1) != HAL_OK) {
-        Serial.println("I2C initialization failed!");
+        // Serial.println("I2C initialization failed!");
         while (1);
     }
 }
@@ -61,7 +60,7 @@ uint16_t AS5600_ReadRawAngle() {
   uint16_t raw_angle = 0;
 
   // Print status before each read attempt
-  Serial.println("Attempting I2C read...");
+  // Serial.println("Attempting I2C read...");
 
   // Reset the I2C bus after each attempt
   HAL_I2C_DeInit(&hi2c1);
@@ -72,16 +71,14 @@ uint16_t AS5600_ReadRawAngle() {
                        I2C_MEMADD_SIZE_8BIT, buffer, 2, HAL_MAX_DELAY) != HAL_OK) {
       // Check for I2C error
       if (I2C_CheckError()) {
-          Serial.println("I2C communication failed, resetting...");
           HAL_I2C_DeInit(&hi2c1);
           HAL_I2C_Init(&hi2c1);
       }
   } else {
       raw_angle = (buffer[0] << 8) | buffer[1]; // Combine MSB and LSB
-      Serial.print("Successfully read angle: ");
-      Serial.println(raw_angle);
+      
   }
-  
+
   return raw_angle;
 }
 
@@ -90,14 +87,16 @@ void setup() {
     pinMode(PC13, OUTPUT);
     Serial.begin(115200);
     I2C_Init(); // Initialize I2C
-    Serial.println("I2C Initialized");
+    Serial.print("I2C Initialized");
+    Serial.print('\n');
 }
 
 void loop() {
   uint16_t raw_angle = AS5600_ReadRawAngle();
   
-  Serial.print("Raw Angle: ");
-  Serial.println(raw_angle);
+  // Serial.print("Raw Angle: ");
+  Serial.print(raw_angle);
+  Serial.print('\n');
 
   digitalWrite(PC13, !digitalRead(PC13));
   delay(50); // 200ms delay

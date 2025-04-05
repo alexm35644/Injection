@@ -1,4 +1,4 @@
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
   31:Core/Src/main.c **** /* USER CODE END PTD */
   32:Core/Src/main.c **** 
   33:Core/Src/main.c **** /* Private define ------------------------------------------------------------*/
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 2
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 2
 
 
   34:Core/Src/main.c **** /* USER CODE BEGIN PD */
@@ -118,7 +118,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
   88:Core/Src/main.c ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   89:Core/Src/main.c ****   HAL_Init();
   90:Core/Src/main.c **** 
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 3
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 3
 
 
   91:Core/Src/main.c ****   /* USER CODE BEGIN Init */
@@ -178,7 +178,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  145:Core/Src/main.c ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
  146:Core/Src/main.c ****   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
  147:Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 4
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 4
 
 
  148:Core/Src/main.c ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -238,7 +238,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  202:Core/Src/main.c **** /**
  203:Core/Src/main.c ****   * @brief TIM3 Initialization Function
  204:Core/Src/main.c ****   * @param None
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 5
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 5
 
 
  205:Core/Src/main.c ****   * @retval None
@@ -298,7 +298,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  259:Core/Src/main.c ****   */
  260:Core/Src/main.c **** static void MX_USART1_UART_Init(void)
  261:Core/Src/main.c **** {
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 6
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 6
 
 
  262:Core/Src/main.c **** 
@@ -358,7 +358,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  296:Core/Src/main.c **** /* USER CODE BEGIN MX_GPIO_Init_1 */
  297:Core/Src/main.c **** /* USER CODE END MX_GPIO_Init_1 */
  298:Core/Src/main.c **** 
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 7
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 7
 
 
  299:Core/Src/main.c ****   /* GPIO Ports Clock Enable */
@@ -418,7 +418,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
   95              		.loc 1 303 3 view .LVU23
   96 0046 9A69     		ldr	r2, [r3, #24]
   97 0048 42F00802 		orr	r2, r2, #8
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 8
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 8
 
 
   98 004c 9A61     		str	r2, [r3, #24]
@@ -478,7 +478,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  138              		.loc 1 317 3 is_stmt 1 view .LVU39
  139              		.loc 1 317 24 is_stmt 0 view .LVU40
  140 0082 0594     		str	r4, [sp, #20]
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 9
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 9
 
 
  318:Core/Src/main.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -538,7 +538,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  182              		.cfi_offset 14, -4
  183 0002 83B0     		sub	sp, sp, #12
  184              	.LCFI4:
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 10
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 10
 
 
  185              		.cfi_def_cfa_offset 16
@@ -598,7 +598,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  342:Core/Src/main.c ****     //printf("starting I2C scan...\n");
  343:Core/Src/main.c ****     uint8_t buffer[2] = {0};
  232              		.loc 1 343 5 view .LVU52
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 11
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 11
 
 
  233              		.loc 1 343 13 is_stmt 0 view .LVU53
@@ -658,7 +658,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  270 0040 1380     		strh	r3, [r2]	@ movhi
  271              	.L11:
  361:Core/Src/main.c ****     }
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 12
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 12
 
 
  362:Core/Src/main.c ****     HAL_Delay(10); // 10 ms delay between I2C operations
@@ -718,7 +718,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  372:Core/Src/main.c ****   */
  373:Core/Src/main.c **** void Error_Handler(void)
  374:Core/Src/main.c **** {
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 13
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 13
 
 
  316              		.loc 1 374 1 view -0
@@ -778,7 +778,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
   42:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
   43:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __INLINE
   44:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __INLINE                               inline
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 14
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 14
 
 
   45:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
@@ -838,7 +838,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
   99:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
  100:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))-
  101:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 15
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 15
 
 
  102:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_READ
@@ -898,7 +898,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  338              		.loc 1 378 3 view .LVU74
  379:Core/Src/main.c ****   {
  380:Core/Src/main.c ****   }
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 16
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 16
 
 
  339              		.loc 1 380 3 view .LVU75
@@ -958,7 +958,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  382              		.loc 1 188 3 is_stmt 1 view .LVU88
  188:Core/Src/main.c ****   hi2c1.Init.OwnAddress2 = 0;
  383              		.loc 1 188 30 is_stmt 0 view .LVU89
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 17
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 17
 
 
  384 0018 4361     		str	r3, [r0, #20]
@@ -1018,7 +1018,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  428              	.LCFI11:
  429              		.cfi_def_cfa_offset 8
  430              		.cfi_offset 3, -8
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 18
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 18
 
 
  431              		.cfi_offset 14, -4
@@ -1078,7 +1078,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  466 0022 00B9     		cbnz	r0, .L27
  286:Core/Src/main.c **** 
  467              		.loc 1 286 1 view .LVU121
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 19
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 19
 
 
  468 0024 08BD     		pop	{r3, pc}
@@ -1138,7 +1138,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  516 0018 1A48     		ldr	r0, .L40
  517 001a 1B4A     		ldr	r2, .L40+4
  518 001c 0260     		str	r2, [r0]
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 20
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 20
 
 
  221:Core/Src/main.c ****   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -1198,7 +1198,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  232:Core/Src/main.c ****   {
  554              		.loc 1 232 6 discriminator 1 view .LVU149
  555 0040 C8B9     		cbnz	r0, .L37
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 21
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 21
 
 
  236:Core/Src/main.c ****   sConfigOC.Pulse = 0;
@@ -1258,7 +1258,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  594              	.LCFI14:
  595              		.cfi_remember_state
  596              		.cfi_def_cfa_offset 4
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 22
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 22
 
 
  597              		@ sp needed
@@ -1318,7 +1318,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  646              		.loc 1 138 22 is_stmt 0 view .LVU172
  647 0004 2822     		movs	r2, #40
  648 0006 0021     		movs	r1, #0
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 23
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 23
 
 
  649 0008 06A8     		add	r0, sp, #24
@@ -1378,7 +1378,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  687 0034 0291     		str	r1, [sp, #8]
  158:Core/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
  688              		.loc 1 158 3 is_stmt 1 view .LVU189
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 24
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 24
 
 
  158:Core/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -1438,7 +1438,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  733              		.thumb_func
  735              	main:
  736              	.LFB68:
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 25
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 25
 
 
   80:Core/Src/main.c **** 
@@ -1498,7 +1498,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  120:Core/Src/main.c **** 
  780              		.loc 1 120 15 discriminator 1 view .LVU212
  781 002c 084B     		ldr	r3, .L51+4
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 26
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 26
 
 
  782 002e 1880     		strh	r0, [r3]	@ movhi
@@ -1558,7 +1558,7 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  833 0000 00000000 		.space	72
  833      00000000 
  833      00000000 
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 27
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 27
 
 
  833      00000000 
@@ -1591,45 +1591,45 @@ ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 1
  857              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
  858              		.file 18 "/Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/arm-none-eabi/include/stdio.h"
  859              		.file 19 "<built-in>"
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 28
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 28
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:19     .text.MX_GPIO_Init:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:24     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:158    .text.MX_GPIO_Init:00000094 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:165    .text.__io_putchar:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:171    .text.__io_putchar:00000000 __io_putchar
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:207    .text.__io_putchar:0000001c $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:825    .bss.huart1:00000000 huart1
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:212    .text.AS5600_ReadRawAngle:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:218    .text.AS5600_ReadRawAngle:00000000 AS5600_ReadRawAngle
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:302    .text.AS5600_ReadRawAngle:00000060 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:839    .bss.hi2c1:00000000 hi2c1
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:818    .bss.raw_angle:00000000 raw_angle
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:308    .text.Error_Handler:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:314    .text.Error_Handler:00000000 Error_Handler
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:346    .text.MX_I2C1_Init:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:351    .text.MX_I2C1_Init:00000000 MX_I2C1_Init
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:409    .text.MX_I2C1_Init:0000002c $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:416    .text.MX_USART1_UART_Init:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:421    .text.MX_USART1_UART_Init:00000000 MX_USART1_UART_Init
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:476    .text.MX_USART1_UART_Init:0000002c $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:482    .text.MX_TIM3_Init:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:487    .text.MX_TIM3_Init:00000000 MX_TIM3_Init
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:620    .text.MX_TIM3_Init:00000084 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:832    .bss.htim3:00000000 htim3
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:626    .text.SystemClock_Config:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:632    .text.SystemClock_Config:00000000 SystemClock_Config
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:725    .rodata.main.str1.4:00000000 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:729    .text.main:00000000 $t
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:735    .text.main:00000000 main
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:807    .text.main:0000004c $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:815    .bss.raw_angle:00000000 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:822    .bss.huart1:00000000 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:829    .bss.htim3:00000000 $d
-/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s:836    .bss.hi2c1:00000000 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:19     .text.MX_GPIO_Init:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:24     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:158    .text.MX_GPIO_Init:00000094 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:165    .text.__io_putchar:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:171    .text.__io_putchar:00000000 __io_putchar
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:207    .text.__io_putchar:0000001c $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:825    .bss.huart1:00000000 huart1
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:212    .text.AS5600_ReadRawAngle:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:218    .text.AS5600_ReadRawAngle:00000000 AS5600_ReadRawAngle
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:302    .text.AS5600_ReadRawAngle:00000060 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:839    .bss.hi2c1:00000000 hi2c1
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:818    .bss.raw_angle:00000000 raw_angle
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:308    .text.Error_Handler:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:314    .text.Error_Handler:00000000 Error_Handler
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:346    .text.MX_I2C1_Init:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:351    .text.MX_I2C1_Init:00000000 MX_I2C1_Init
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:409    .text.MX_I2C1_Init:0000002c $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:416    .text.MX_USART1_UART_Init:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:421    .text.MX_USART1_UART_Init:00000000 MX_USART1_UART_Init
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:476    .text.MX_USART1_UART_Init:0000002c $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:482    .text.MX_TIM3_Init:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:487    .text.MX_TIM3_Init:00000000 MX_TIM3_Init
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:620    .text.MX_TIM3_Init:00000084 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:832    .bss.htim3:00000000 htim3
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:626    .text.SystemClock_Config:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:632    .text.SystemClock_Config:00000000 SystemClock_Config
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:725    .rodata.main.str1.4:00000000 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:729    .text.main:00000000 $t
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:735    .text.main:00000000 main
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:807    .text.main:0000004c $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:815    .bss.raw_angle:00000000 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:822    .bss.huart1:00000000 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:829    .bss.htim3:00000000 $d
+/var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s:836    .bss.hi2c1:00000000 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_WritePin
@@ -1651,7 +1651,7 @@ HAL_Init
 HAL_GPIO_TogglePin
 sprintf
 printf
-ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccypFvXx.s 			page 29
+ARM GAS  /var/folders/8x/_y6g3dfs0698dfd49y4vcg_w0000gn/T//ccIz4K1F.s 			page 29
 
 
 putchar

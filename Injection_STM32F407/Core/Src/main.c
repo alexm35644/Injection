@@ -41,8 +41,8 @@
 /* USER CODE BEGIN PD */
 
 #define JOINT1_HOME 0
-#define JOINT2_HOME 90
-#define JOINT3_HOME 180
+#define JOINT2_HOME 80
+#define JOINT3_HOME 160
 #define JOINT4_HOME 0
 #define JOINT5_HOME 40
 #define ACTUATOR_HOME 0
@@ -297,8 +297,15 @@ int main(void)
         joint2 = JOINT2_HOME;
         Joint2Set(joint2);
 
+        joint5 = JOINT5_HOME;
+        Joint5Set(joint5);
+
+        injectFlag = RETRACT;  // Set the inject flag
+        inject(RETRACT, adcValue);  // Retract command
+        
+
         // Wait for 1 second after setting joint2
-        while (HAL_GetTick() - lastMillis < 1000) {
+        while (HAL_GetTick() - lastMillis < 1800) {
             // Loop here doing nothing but waiting for 1 second.
         }
 
@@ -307,11 +314,8 @@ int main(void)
         Joint3Set(joint3);
         joint4 = JOINT4_HOME;
         Joint4Set(joint4);
-        joint5 = JOINT5_HOME;
-        Joint5Set(joint5);
         
-        injectFlag = RETRACT;  // Set the inject flag
-        inject(RETRACT, adcValue);  // Retract command
+        
         
     }
 
@@ -952,6 +956,8 @@ void HomeSetUser() {
       // Set Joint 2 and start a delay
       joint2 = JOINT2_HOME;
       Joint2Set(joint2);
+      joint5 = JOINT5_HOME;
+      Joint5Set(joint5);
       lastMillis = HAL_GetTick();  // Start the 1-second delay
       step = 2;  // Move to the next step
   } else if (step == 2) {
@@ -962,8 +968,7 @@ void HomeSetUser() {
           Joint3Set(joint3);
           joint4 = JOINT4_HOME;
           Joint4Set(joint4);
-          joint5 = JOINT5_HOME;
-          Joint5Set(joint5);
+          
           injectFlag = RETRACT;  // Set the inject flag
 
           step = 0;  // Reset for the next time HomeSetUser() is called
@@ -1034,7 +1039,7 @@ void injectSequence(){
   //HAL_Delay(500);
   Joint3Set(70);
   //HAL_Delay(500);
-  Joint2Set(4);
+  Joint2Set(6);
 }
 
 void inject(int direction, int adc) {
