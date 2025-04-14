@@ -42,7 +42,7 @@
 
 #define JOINT1_HOME 0
 #define JOINT2_HOME 80
-#define JOINT3_HOME 160
+#define JOINT3_HOME 10
 #define JOINT4_HOME 0
 #define JOINT5_HOME 40
 #define ACTUATOR_HOME 0
@@ -111,6 +111,7 @@ int ledFlag = 0;
 int injectFlag = RETRACT; 
 volatile uint8_t buttonState = 0; // Global variable to track the button state
 volatile uint8_t footPedalFlag = 0;   // Global footpedal flag 
+volatile uint8_t footPedalMode = 0; // Global variable to track the foot pedal state
 
 int injectionLimit = 2600;
 int retractionLimit = 4050;
@@ -257,7 +258,7 @@ int main(void)
   HAL_UART_Receive_IT(JOINT4_UART, &rx_byte4, 1); // Start receiving single bytes in interrupt mode
   HAL_UART_Receive_IT(JOINT5_UART, &rx_byte5, 1); // Start receiving single bytes in interrupt mode
 
-
+  HomeSet(); // Set all joints to home position
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -269,55 +270,64 @@ int main(void)
     uint16_t adcValue = Read_ADC_PA0();
     HAL_Delay(1);
 
-    // Foot pedal or button press logic
-    if (!HAL_GPIO_ReadPin(USER2_GPIO_Port, USER2_Pin)) { 
-        injectSequence();
+    // // Foot pedal or button press logic
+    // if(footPedalMode == 1){
+    //     if (!HAL_GPIO_ReadPin(USER2_GPIO_Port, USER2_Pin)) { 
+    //         injectSequence();
+    
+    //         if (!buttonHeld) { 
+    //             buttonHeld = 1; 
+    //             buttonPressTime = HAL_GetTick(); // Record the press time
+    //             injectFlag = RETRACT; 
+    //             inject(RETRACT, adcValue);
+    //         } 
+    
+    //         if (HAL_GetTick() - buttonPressTime >= 4500) { // Check if held for 1 second
+    //             injectFlag = INJECT; 
+    //             inject(INJECT, adcValue);
+    //         }
+    
+    //     } else {
+    //         buttonHeld = 0;
+    //         buttonPressTime = 0; // Reset timer
+    //         uint32_t lastMillis = HAL_GetTick(); // Start the delay timer
+    
+    //         // Home set logic
+    //         joint1 = JOINT1_HOME;
+    //         Joint1Set(joint1);
+    
+    //         joint2 = JOINT2_HOME;
+    //         Joint2Set(joint2);
+    
+    //         joint5 = JOINT5_HOME;
+    //         Joint5Set(joint5);
+    
+    //         injectFlag = RETRACT;  // Set the inject flag
+    //         inject(RETRACT, adcValue);  // Retract command
+            
+    
+    //         // Wait for 1 second after setting joint2
+    //         while (HAL_GetTick() - lastMillis < 1800) {
+    //             // Loop here doing nothing but waiting for 1 second.
+    //         }
+    
+    //         // Set the remaining joints after the delay
+    //         joint3 = JOINT3_HOME;
+    //         Joint3Set(joint3);
+    //         joint4 = JOINT4_HOME;
+    //         Joint4Set(joint4);
+            
+            
+            
+    //     }
 
-        if (!buttonHeld) { 
-            buttonHeld = 1; 
-            buttonPressTime = HAL_GetTick(); // Record the press time
-            injectFlag = RETRACT; 
-            inject(RETRACT, adcValue);
-        } 
 
-        if (HAL_GetTick() - buttonPressTime >= 4500) { // Check if held for 1 second
-            injectFlag = INJECT; 
-            inject(INJECT, adcValue);
-        }
-
-    } else {
-        buttonHeld = 0;
-        buttonPressTime = 0; // Reset timer
-        uint32_t lastMillis = HAL_GetTick(); // Start the delay timer
-
-        // Home set logic
-        joint1 = JOINT1_HOME;
-        Joint1Set(joint1);
-
-        joint2 = JOINT2_HOME;
-        Joint2Set(joint2);
-
-        joint5 = JOINT5_HOME;
-        Joint5Set(joint5);
-
-        injectFlag = RETRACT;  // Set the inject flag
-        inject(RETRACT, adcValue);  // Retract command
-        
-
-        // Wait for 1 second after setting joint2
-        while (HAL_GetTick() - lastMillis < 1800) {
-            // Loop here doing nothing but waiting for 1 second.
-        }
-
-        // Set the remaining joints after the delay
-        joint3 = JOINT3_HOME;
-        Joint3Set(joint3);
-        joint4 = JOINT4_HOME;
-        Joint4Set(joint4);
-        
-        
-        
-    }
+    // }
+    // HomeSet(); 
+    // HAL_Delay(5000);
+    // injectSequence();
+    // HAL_Delay(5000);
+    
 
     /* USER CODE END 3 */
 }
@@ -911,9 +921,20 @@ void ProcessReceivedString(char *str)
     }
     else if (strncmp(str, "sequence", 8) == 0)
     {
-        printf("inject sequence.../r/n");
+        printf("inject sequence...\r\n");
         injectSequence(); 
         
+    }
+    else if (strncmp(str, "foot on", 9) == 0)
+    {
+        printf("Foot Pedal Mode on!\r\n");
+        footPedalMode = 1;
+        
+    }
+    else if (strncmp(str, "foot off", 9) == 0)
+    {
+        printf("Foot Pedal Mode off!\r\n");
+        footPedalMode = 0;
     }
 
     // Echoes string if no keywords are sent
@@ -1035,9 +1056,9 @@ uint16_t Read_ADC_PA0() {
 void injectSequence(){
   Joint5Set(18);
   //HAL_Delay(500);
-  Joint4Set(28);
+  Joint4Set(90);
   //HAL_Delay(500);
-  Joint3Set(70);
+  Joint3Set(45);
   //HAL_Delay(500);
   Joint2Set(6);
 }

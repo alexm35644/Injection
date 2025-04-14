@@ -21,8 +21,7 @@
 #define RIGHT 1
 #define PWM_LOWER_LIMIT -500
 #define PWM_UPPER_LIMIT  600
-#define PWM_EXTRA_UPPER  700
-#define TOLERANCE 4
+#define TOLERANCE 2
 
 
 // String
@@ -54,8 +53,8 @@ const unsigned long interval = 50; // Interval in milliseconds
 int encoderValue, inputValue, thetaValue;
 int angleDifference = 0;
 int angleValue = 0;
-int rightLimit = 3100; // 33 degrees
-int leftLimit = 1700;  // 150 degrees
+int rightLimit = 3100; // 10 degrees
+int leftLimit = 2430;  // 90 degrees
 int pwmValue; 
 
 int home = 90;
@@ -133,22 +132,22 @@ void loop() {
   Setpoint = thetaTarget;
   
   // Map the encoder value to a range of 0 to 150
-  Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
+  Input = map(encoderValue, rightLimit, leftLimit, 10, 90);
 
   int angleDifference = thetaTarget - Input; 
 
   // Calculate angle difference
-  int Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
+  int Input = map(encoderValue, rightLimit, leftLimit, 10, 90);
   angleDifference = thetaTarget - Input;
 
   
 
   if (abs(angleDifference) > TOLERANCE) {
     if (angleDifference > 0) { // CW
-        int pwmValue = map(abs(angleDifference), 0, 180, 550, 650); // Scale smoothly  
+        int pwmValue = map(abs(angleDifference), 10, 90, 550, 650); // Scale smoothly  
         moveMotor(pwmValue, LEFT);
     } else { // CCW
-        int pwmValue = map(abs(angleDifference), 0, 180, 120, 400); // Scale smoothly  
+        int pwmValue = map(abs(angleDifference), 10, 90, 150, 400); // Scale smoothly  
         moveMotor(pwmValue, RIGHT);
     }
     } else {
@@ -188,7 +187,7 @@ void readSerial() {
 
   if (inputComplete) {
     int parsedValue = inputString.toInt();
-    thetaTarget = constrain(parsedValue, 0, 150);
+    thetaTarget = constrain(parsedValue, 10, 90);
     inputString = "";
     inputComplete = false;
   }

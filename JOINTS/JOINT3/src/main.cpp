@@ -53,11 +53,11 @@ const unsigned long interval = 50; // Interval in milliseconds
 int encoderValue, inputValue, thetaValue;
 int angleDifference = 0;
 int angleValue = 0;
-int rightLimit = 1200; // 0 degrees
+int rightLimit = 1400; // 0 degrees
 int leftLimit = 500;  // 180 degrees
 int pwmValue; 
 
-int home = 130;
+int home = 45;
 int thetaTarget = home; // Target angle (0–150 degrees)
 int previousTarget = home; 
 
@@ -131,23 +131,23 @@ void loop() {
 
   Setpoint = thetaTarget;
   
-  // Map the encoder value to a range of 0 to 150
-  Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
+  // Map the encoder value to a range of 0 to 90
+  Input = map(encoderValue, rightLimit, leftLimit, 0, 90);
 
   int angleDifference = thetaTarget - Input; 
 
   // Calculate angle difference
-  int Input = map(encoderValue, rightLimit, leftLimit, 0, 180);
+  int Input = map(encoderValue, rightLimit, leftLimit, 0, 90);
   angleDifference = thetaTarget - Input;
 
   
 
   if (abs(angleDifference) > TOLERANCE) {
     if (angleDifference > 0) { // CW
-        int pwmValue = map(abs(angleDifference), 0, 180, 100, 400); // Scale smoothly  
+        int pwmValue = map(abs(angleDifference), 0, 90, 100, 400); // Scale smoothly  
         moveMotor(pwmValue, LEFT);
     } else { // CCW
-        int pwmValue = map(abs(angleDifference), 0, 180, 500, 800); // Scale smoothly  
+        int pwmValue = map(abs(angleDifference), 0, 90, 500, 800); // Scale smoothly  
         moveMotor(pwmValue, RIGHT);
     }
     } else {
@@ -185,7 +185,7 @@ void loop() {
   //   moveMotor(pwmValue, RIGHT);
   // }
   
-  // DEBUG_DELAY(50); // Remove after testing
+  DEBUG_DELAY(50); // Remove after testing
 }
 
 void moveMotor(int pwmValue, bool direction) {
@@ -218,7 +218,8 @@ void readSerial() {
 
   if (inputComplete) {
     int parsedValue = inputString.toInt();
-    thetaTarget = constrain(parsedValue, 0, 180);
+    thetaTarget = constrain(parsedValue, 0, 90);
+    thetaTarget = abs(thetaTarget - 90); 
     inputString = "";
     inputComplete = false;
   }

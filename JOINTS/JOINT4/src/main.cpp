@@ -33,7 +33,7 @@ const int in1 = PB0;
 const int in2 = PB1;
 
 // PID parameters
-double Pk1 = 2.5;  // Speed it gets there
+double Pk1 = 1.5;  // Speed it gets there
 double Ik1 = 0;
 double Dk1 = 0.05;
 double Setpoint, Input, Output;
@@ -54,7 +54,7 @@ int encoderValue, inputValue, thetaValue;
 int angleDifference = 0;
 int angleValue = 0;
 int rightLimit = 4099; // 0 degrees
-int leftLimit = 1200;  // 90 degrees
+int leftLimit = 3204;  // 90 degrees
 int pwmValue; 
 
 int home = 0;
